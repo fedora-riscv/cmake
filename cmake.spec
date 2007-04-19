@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu Apr 19 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
+* Thu Apr 19 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
 - Update to 2.4.6
 - Apply patch from upstream CVS to fix .so install permissions (bug #235673)
 - Add rpm macros
