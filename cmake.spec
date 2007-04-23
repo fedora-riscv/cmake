@@ -1,6 +1,6 @@
 Name:		cmake
 Version:	2.4.6
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Cross-platform make system
 
 Group:		Development/Tools
@@ -14,7 +14,7 @@ Patch1:         cmake-2.4.5-xmlrpc.patch
 Patch2:         cmake-2.4.6-soexe.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  ncurses-devel, libX11-devel
-BuildRequires:  curl-devel, expat-devel, xmlrpc-c-devel, zlib-devel
+BuildRequires:  curl-devel, expat-devel, zlib-devel
 Requires:       rpm
 
 
@@ -39,7 +39,7 @@ export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 ./bootstrap --init=%SOURCE1 --prefix=%{_prefix} --datadir=/share/%{name} \
             --docdir=/share/doc/%{name}-%{version} --mandir=/share/man \
-            --system-libs
+            --no-system-libs
 make VERBOSE=1 %{?_smp_mflags}
 
 
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr 23 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-2
+- Use bundled libraries for initial EPEL build
+
 * Thu Apr 19 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
 - Update to 2.4.6
 - Apply patch from upstream CVS to fix .so install permissions (bug #235673)
