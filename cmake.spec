@@ -1,6 +1,6 @@
 Name:		cmake
-Version:	2.4.5
-Release:	2%{?dist}
+Version:	2.4.6
+Release:	3%{?dist}
 Summary:	Cross-platform make system
 
 Group:		Development/Tools
@@ -8,11 +8,14 @@ License:	BSD
 URL:		http://www.cmake.org
 Source0:	http://www.cmake.org/files/v2.4/cmake-%{version}.tar.gz
 Source1:        cmake-init-fedora
+Source2:        macros.cmake
 Patch0:         cmake-2.4.2-fedora.patch
 Patch1:         cmake-2.4.5-xmlrpc.patch
+Patch2:         cmake-2.4.6-soexe.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  ncurses-devel, libX11-devel
 BuildRequires:  curl-devel, expat-devel, xmlrpc-c-devel, zlib-devel
+Requires:       rpm
 
 
 %description
@@ -28,6 +31,7 @@ generation, code generation, and template instantiation.
 %setup -q
 %patch -p1 -b .fedora
 %patch1 -p1 -b .xmlrpc
+%patch2 -p1 -b .soexe
 
 
 %build
@@ -36,7 +40,7 @@ export CXXFLAGS="$RPM_OPT_FLAGS"
 ./bootstrap --init=%SOURCE1 --prefix=%{_prefix} --datadir=/share/%{name} \
             --docdir=/share/doc/%{name}-%{version} --mandir=/share/man \
             --system-libs
-make %{?_smp_mflags}
+make VERBOSE=1 %{?_smp_mflags}
 
 
 %install
@@ -46,6 +50,9 @@ find $RPM_BUILD_ROOT/%{_datadir}/%{name}/Modules -type f | xargs chmod -x
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
 cp -a Example $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{version}/
 install -m 0644 Docs/cmake-mode.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
+# RPM macros
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
+install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/
 
 
 %clean
@@ -54,6 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/rpm/macros.cmake
 %{_datadir}/doc/%{name}-%{version}/
 %{_bindir}/ccmake
 %{_bindir}/cmake
@@ -65,13 +73,22 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr 16 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-3
+- Apply patch from upstream CVS to fix .so install permissions (bug #235673)
+
+* Fri Apr 06 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-2
+- Add rpm macros
+
+* Thu Jan 11 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
+- Update to 2.4.6
+
 * Mon Dec 18 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.5-2
 - Use system libraries (bootstrap --system-libs)
 
 * Tue Dec  5 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.5-1
 - Update to 2.4.5
 
-* Mon Nov 27 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.4-1
+* Tue Nov 21 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.4-1
 - Update to 2.4.4
 
 * Tue Oct 31 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.3-4
