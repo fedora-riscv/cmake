@@ -1,20 +1,23 @@
+# Set to bcond_without or use --with bootstrap if bootstrapping a new release
+# or architecture
+%bcond_with bootstrap
+
 Name:		cmake
-Version:	2.4.6
-Release:	2%{?dist}
+Version:	2.4.8
+Release:	3%{?dist}
 Summary:	Cross-platform make system
 
 Group:		Development/Tools
 License:	BSD
 URL:		http://www.cmake.org
 Source0:	http://www.cmake.org/files/v2.4/cmake-%{version}.tar.gz
-Source1:        cmake-init-fedora
 Source2:        macros.cmake
 Patch0:         cmake-2.4.2-fedora.patch
 Patch1:         cmake-2.4.5-xmlrpc.patch
-Patch2:         cmake-2.4.6-soexe.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  ncurses-devel, libX11-devel
 BuildRequires:  curl-devel, expat-devel, zlib-devel
+%{?!with_bootstrap:BuildRequires: xmlrpc-c-devel}
 Requires:       rpm
 
 
@@ -31,15 +34,14 @@ generation, code generation, and template instantiation.
 %setup -q
 %patch -p1 -b .fedora
 %patch1 -p1 -b .xmlrpc
-%patch2 -p1 -b .soexe
 
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
-./bootstrap --init=%SOURCE1 --prefix=%{_prefix} --datadir=/share/%{name} \
+./bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
             --docdir=/share/doc/%{name}-%{version} --mandir=/share/man \
-            --no-system-libs
+            --%{?with_bootstrap:no-}system-libs
 make VERBOSE=1 %{?_smp_mflags}
 
 
@@ -53,6 +55,10 @@ install -m 0644 Docs/cmake-mode.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
 # RPM macros
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
 install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/
+
+
+%check
+ctest -V
 
 
 %clean
@@ -73,13 +79,49 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Mon Apr 23 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-2
-- Use bundled libraries for initial EPEL build
+* Fri Mar 7 2008 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-3
+- Add macro for bootstrapping new release/architecture
+- Add %%check section
 
-* Thu Apr 19 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
-- Update to 2.4.6
+* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 2.4.8-2
+- Autorebuild for GCC 4.3
+
+* Tue Jan 22 2008 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-1
+- Update to 2.4.8
+
+* Wed Jan 16 2008 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-0.rc12
+- Update to 2.4.8 RC-12
+
+* Fri Dec 14 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-0.rc4
+- Update to 2.4.8 RC-4
+
+* Mon Nov 12 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.7-4
+- No longer set CMAKE_SKIP_RPATH
+
+* Tue Aug 28 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.7-3
+- Rebuild for new expat
+
+* Wed Aug 22 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.7-2
+- Rebuild for BuildID
+
+* Mon Jul 23 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.7-1
+- Update to 2.4.7
+
+* Fri Jun 29 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.7-0.rc11
+- Update to 2.4.7 RC-11
+
+* Wed Jun 27 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-4
+- Update macros.cmake to add CMAKE_INSTALL_LIBDIR, INCLUDE_INSTALL_DIR,
+  LIB_INSTALL_DIR, SYSCONF_INSTALL_DIR, and SHARE_INSTALL_PREFIX
+
+* Mon Apr 16 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-3
 - Apply patch from upstream CVS to fix .so install permissions (bug #235673)
+
+* Fri Apr 06 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-2
 - Add rpm macros
+
+* Thu Jan 11 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-1
+- Update to 2.4.6
 
 * Mon Dec 18 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.5-2
 - Use system libraries (bootstrap --system-libs)
@@ -87,7 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 * Tue Dec  5 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.5-1
 - Update to 2.4.5
 
-* Mon Nov 27 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.4-1
+* Tue Nov 21 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.4-1
 - Update to 2.4.4
 
 * Tue Oct 31 2006 Orion Poplawski <orion@cora.nwra.com> - 2.4.3-4
