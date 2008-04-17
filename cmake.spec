@@ -58,7 +58,8 @@ install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/
 
 
 %check
-bin/ctest -V
+# Exclude curl test which tries to make network connections
+bin/ctest -V -E curl
 
 
 %clean
