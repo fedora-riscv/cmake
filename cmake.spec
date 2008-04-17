@@ -1,6 +1,6 @@
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:		cmake
 Version:	2.4.8
