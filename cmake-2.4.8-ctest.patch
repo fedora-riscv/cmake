@@ -1,0 +1,11 @@
+--- cmake-2.4.8/Source/cmCTest.cxx  2008-01-21 11:59:52.000000000 -0700
++++ cmake-2.6.0/Source/cmCTest.cxx        2008-05-05 12:25:54.000000000 -0600
+@@ -76,7 +71,7 @@
+   //is the time at which the nightly dashboard was opened or
+   //will be opened on the date of the current client machine.
+   //As such, this time may be in the past or in the future.
+-  time_t ntime = curl_getdate(str.c_str(), &tctime);
++  time_t ntime = curl_getdate(buf, &tctime);
+   cmCTestLog(this, DEBUG, "   Get curl time: " << ntime << std::endl);
+   tctime = time(0);
+   cmCTestLog(this, DEBUG, "   Get the current time: " << tctime << std::endl);

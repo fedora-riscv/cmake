@@ -1,6 +1,6 @@
 Name:		cmake
 Version:	2.4.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Cross-platform make system
 
 Group:		Development/Tools
@@ -10,6 +10,7 @@ Source0:	http://www.cmake.org/files/v2.4/cmake-%{version}.tar.gz
 Source2:        macros.cmake
 Patch0:         cmake-2.4.2-fedora.patch
 Patch1:         cmake-2.4.5-xmlrpc.patch
+Patch2:         cmake-2.4.8-ctest.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  ncurses-devel, libX11-devel
 BuildRequires:  curl-devel, expat-devel, xmlrpc-c-devel, zlib-devel
@@ -29,6 +30,7 @@ generation, code generation, and template instantiation.
 %setup -q
 %patch -p1 -b .fedora
 %patch1 -p1 -b .xmlrpc
+%patch2 -p1 -b .ctest
 
 
 %build
@@ -70,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jun 5 2008 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-2
+- Add patch to fix ctest Nightly timestamps (bug #436358)
+
 * Tue Jan 22 2008 Orion Poplawski <orion@cora.nwra.com> - 2.4.8-1
 - Update to 2.4.8
 
