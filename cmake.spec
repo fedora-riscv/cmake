@@ -8,7 +8,7 @@
 
 Name:           cmake
 Version:        2.6.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -130,6 +130,10 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Fri Jan 09 2009 Rex Dieter <rdieter@fedoraproject.org>  2.6.3-3
+- macros.cmake: add -DCMAKE_VERBOSE_MAKEFILE=ON (#474053)
+- macros.cmake: add -DCMAKE_SKIP_RPATH:BOOL=ON
+
 * Tue Oct 21 2008 Orion Poplawski <orion@cora.nwra.com> - 2.6.2-2
 - Allow conditional build of gui
 
