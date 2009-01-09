@@ -130,7 +130,7 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
-* Fri Jan 09 2009 Rex Dieter <rdieter@fedoraproject.org>  2.6.3-3
+* Fri Jan 09 2009 Rex Dieter <rdieter@fedoraproject.org>  2.6.2-3
 - macros.cmake: add -DCMAKE_VERBOSE_MAKEFILE=ON (#474053)
 - macros.cmake: add -DCMAKE_SKIP_RPATH:BOOL=ON
 
