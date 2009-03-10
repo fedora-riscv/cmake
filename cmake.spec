@@ -7,8 +7,8 @@
 %define rcver %{nil}
 
 Name:           cmake
-Version:        2.6.2
-Release:        3%{?dist}
+Version:        2.6.3
+Release:        2%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -16,6 +16,9 @@ License:        BSD
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v2.6/cmake-%{version}%{rcver}.tar.gz
 Source2:        macros.cmake
+# fix crash during kdepimlibs build
+# https://bugzilla.redhat.com/show_bug.cgi?id=475876
+Patch0:         cmake-2.6.3-#475876.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel, libX11-devel
@@ -26,8 +29,6 @@ BuildRequires: xmlrpc-c-devel
 %if %{with gui}
 BuildRequires: qt4-devel, desktop-file-utils
 %define qt_gui --qt-gui
-%else
-%define qt_gui %{nil}
 %endif
 Requires:       rpm
 
@@ -41,7 +42,6 @@ to support complex environments requiring system configuration, pre-processor
 generation, code generation, and template instantiation.
 
 
-%if %{with gui}
 %package        gui
 Summary:        Qt GUI for %{name}
 Group:          Development/Tools
@@ -49,11 +49,11 @@ Requires:       %{name} = %{version}-%{release}
 
 %description    gui
 The %{name}-gui package contains the Qt based GUI for CMake.
-%endif
 
 
 %prep
 %setup -q -n %{name}-%{version}%{rcver}
+%patch0 -p1 -b .475876
 # Fixup permissions
 find -name \*.h -o -name \*.cxx -print0 | xargs -0 chmod -x
 
@@ -65,7 +65,7 @@ export CXXFLAGS="$RPM_OPT_FLAGS"
             --docdir=/share/doc/%{name}-%{version} --mandir=/share/man \
             --%{?with_bootstrap:no-}system-libs \
             --parallel=`/usr/bin/getconf _NPROCESSORS_ONLN` \
-            %{qt_gui}
+            %{?qt_gui}
 make VERBOSE=1 %{?_smp_mflags}
 
 
@@ -77,8 +77,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
 cp -a Example $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{version}/
 install -m 0644 Docs/cmake-mode.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
 # RPM macros
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm
-install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/
+install -p -m0644 -D %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.cmake
 %if %{with gui}
 # Desktop file
 desktop-file-install --delete-original \
@@ -130,9 +129,29 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
-* Fri Jan 09 2009 Rex Dieter <rdieter@fedoraproject.org>  2.6.2-3
-- macros.cmake: add -DCMAKE_VERBOSE_MAKEFILE=ON (#474053)
+* Mon Mar 09 2009 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.6.3-2
+- Fix crash during kdepimlibs build (#475876)
+
+* Mon Feb 23 2009 Orion Poplawski <orion@cora.nwra.com> - 2.6.3-1
+- Update to 2.6.3 final
+
+* Tue Feb 17 2009 Orion Poplawski <orion@cora.nwra.com> - 2.6.3-0.4.rc13
+- Update to 2.6.3-RC-13
+
+* Tue Jan 13 2009 Orion Poplawski <orion@cora.nwra.com> - 2.6.3-0.3.rc8
+- Update to 2.6.3-RC-8
+
+* Sun Jan 04 2009 Rex Dieter <rdieter@fedoraproject.org> - 2.6.3-0.2.rc5
 - macros.cmake: add -DCMAKE_SKIP_RPATH:BOOL=ON
+- fix Release tag
+
+* Wed Dec 10 2008 Orion Poplawski <orion@cora.nwra.com> - 2.6.3-0.rc5.1
+- Update to 2.6.3-RC-5
+
+* Tue Dec 2 2008 Rex Dieter <rdieter@fedoraproject.org> - 2.6.2-3
+- Add -DCMAKE_VERBOSE_MAKEFILE=ON to %%cmake (#474053)
+- preserve timestamp of macros.cmake
+- cosmetics
 
 * Tue Oct 21 2008 Orion Poplawski <orion@cora.nwra.com> - 2.6.2-2
 - Allow conditional build of gui
