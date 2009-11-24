@@ -8,7 +8,7 @@
 
 Name:           cmake
 Version:        2.6.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -19,6 +19,8 @@ Source2:        macros.cmake
 #Find UseVTK.cmake in /usr/lib64/vtk-* on 64-bit machines
 #http://public.kitware.com/mantis/view.php?id=9105
 Patch0:         cmake-2.6.4-vtk64.patch
+#Add ppc64 to FindJNI.cmake
+Patch1:         cmake-ppc64-awtdir.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel, libX11-devel
@@ -54,6 +56,7 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 %prep
 %setup -q -n %{name}-%{version}%{rcver}
 %patch0 -p1 -b .vtk64
+%patch1 -p1 -b .ppc64
 # Fixup permissions
 find -name \*.h -o -name \*.cxx -print0 | xargs -0 chmod -x
 
@@ -132,6 +135,9 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Tue Nov 24 2009 Orion Poplawski <orion@cora.nwra.com> - 2.6.4-3
+- Add patch to find JNI on ppc64 (bug #537628)
+
 * Wed Jun 3 2009 Orion Poplawski <orion@cora.nwra.com> - 2.6.4-2
 - Add patch to find VTK on 64-bit machines (bug #503945)
 
