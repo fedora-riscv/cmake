@@ -8,7 +8,7 @@
 
 Name:           cmake
 Version:        2.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -16,6 +16,8 @@ License:        BSD
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v2.8/cmake-%{version}%{?rcver}.tar.gz
 Source2:        macros.cmake
+#Backported pactch to find phonon headers
+Patch0:         cmake-2.8.0-phonon.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  ncurses-devel, libX11-devel
@@ -50,6 +52,7 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 
 %prep
 %setup -q -n %{name}-%{version}%{?rcver}
+%patch0 -p1 -b .phonon
 # Fixup permissions
 find -name \*.h -o -name \*.cxx -print0 | xargs -0 chmod -x
 
@@ -133,6 +136,9 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Mon Aug 9 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.0-3
+- Add patch to find phonon headers (bug #622554)
+
 * Thu Jan 14 2010 Rex Dieter <rdieter@fedorproject.org> - 2.8.0-2
 - macros.cmake: drop -DCMAKE_SKIP_RPATH:BOOL=ON from %%cmake
 

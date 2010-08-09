@@ -1,0 +1,33 @@
+From 55a3967edac59cd0fdd7605b4f56404da01833fc Mon Sep 17 00:00:00 2001
+From: Clinton Stimpson <clinton@elemtech.com>
+Date: Wed, 13 Jan 2010 17:34:31 -0500
+Subject: [PATCH] Fix bug #10114. Find phonon on some installations.
+
+---
+ Modules/FindQt4.cmake |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/Modules/FindQt4.cmake b/Modules/FindQt4.cmake
+index 01bf95e..063c4f5 100644
+--- a/Modules/FindQt4.cmake
++++ b/Modules/FindQt4.cmake
+@@ -670,6 +670,16 @@ IF (QT4_QMAKE_FOUND)
+               ${QT_LIBRARY_DIR}/${QT_MODULE}.framework/Headers
+               NO_DEFAULT_PATH
+       )
++    # phonon doesn't seem consistent, let's try phonondefs.h for some
++    # installations
++    IF(${QT_MODULE} STREQUAL "phonon")
++      FIND_PATH(QT_${_upper_qt_module}_INCLUDE_DIR phonondefs.h
++                PATHS
++                ${QT_HEADERS_DIR}/${QT_MODULE}
++                ${QT_LIBRARY_DIR}/${QT_MODULE}.framework/Headers
++                NO_DEFAULT_PATH
++        )
++    ENDIF(${QT_MODULE} STREQUAL "phonon")
+   ENDFOREACH(QT_MODULE)
+ 
+   IF(WIN32)
+-- 
+1.7.2.1
+
