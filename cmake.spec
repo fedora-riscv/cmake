@@ -95,7 +95,7 @@ desktop-file-install --delete-original \
 
 %check
 unset DISPLAY
-bin/ctest -V
+bin/ctest -V -E curl
 
 
 %clean
