@@ -8,7 +8,7 @@
 
 Name:           cmake
 Version:        2.6.4
-Release:        5%{?dist}.1
+Release:        5%{?dist}.2
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -136,6 +136,9 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Wed Aug 18 2010 Orion Poplawski <orion@cora.nwra.com> - 2.6.4-5.2
+- Drop CMAKE_SKIP_RPATH=ON from cmake macro, as in master
+
 * Tue Aug 17 2010 Orion Poplawski <orion@cora.nwra.com> - 2.6.4-5.1
 - Build bootstrap - EL5 doesn't have xmlrpc-c yet
 - Don't build qui - qt is too old
