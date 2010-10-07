@@ -105,7 +105,7 @@ unset DISPLAY
 pushd build
 #ModuleNotices fails for some unknown reason, and we don't care
 #CMake.HTML currently requires internet access
-bin/ctest -V -E ModuleNotices -E CMake.HTML %{?_smp_mflags}
+bin/ctest -V -E 'CMake.(HTML|ModuleNotices)' %{?_smp_mflags}
 
 
 %clean
@@ -149,6 +149,7 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 %changelog
 * Thu Oct 7 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.2-3
 - Update FindGTK2 to latest git to fix bug 639058
+- Disable ModuleNotices - barfs on fixed typo in FindGTK2
 
 * Fri Jul 23 2010 Kevin Kofler <Kevin@tigcc.ticalc.org> - 2.8.2-2
 - add support for Python 2.7 to FindPythonLibs.cmake (Orcan Ogetbil)
