@@ -263,9 +263,6 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 - Update macros.cmake to add CMAKE_INSTALL_LIBDIR, INCLUDE_INSTALL_DIR,
   LIB_INSTALL_DIR, SYSCONF_INSTALL_DIR, and SHARE_INSTALL_PREFIX
 
-* Mon Apr 16 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-3
-- Apply patch from upstream CVS to fix .so install permissions (bug #235673)
-
 * Mon Apr 23 2007 Orion Poplawski <orion@cora.nwra.com> - 2.4.6-2
 - Use bundled libraries for initial EPEL build
 
