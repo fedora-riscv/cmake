@@ -28,7 +28,7 @@ Patch0:         cmake-2.6.4-vtk64.patch
 Patch1:         cmake-ppc64-awtdir.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  ncurses-devel, libX11-devel
+BuildRequires:  ncurses-devel
 BuildRequires:  curl-devel, expat-devel, zlib-devel
 %if %{without bootstrap}
 BuildRequires: xmlrpc-c-devel
