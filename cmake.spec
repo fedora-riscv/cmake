@@ -1,3 +1,6 @@
+%global bcond_with %{expand:%%{?_with_%{1}:%%global with_%{1} 1}}
+%global bcond_without %{expand:%%{!?_without_%{1}:%%global with_%{1} 1}}
+
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
 %bcond_without bootstrap
