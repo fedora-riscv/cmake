@@ -2,13 +2,16 @@
 # Macros for cmake
 #
 %_cmake_lib_suffix64 -DLIB_SUFFIX=64
-%__cmake %{_bindir}/cmake
+%_cmake_skip_rpath -DCMAKE_SKIP_RPATH:BOOL=ON
+%_cmake_version @@CMAKE_VERSION@@
+%__cmake /usr/bin/cmake
 
 %cmake \
   CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
   CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
   FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
   %__cmake \\\
+        -DCMAKE_VERBOSE_MAKEFILE=ON \\\
         -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \\\
         -DCMAKE_INSTALL_LIBDIR:PATH=%{_libdir} \\\
         -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} \\\
