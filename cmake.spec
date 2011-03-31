@@ -7,8 +7,8 @@
 %define rcver %{nil}
 
 Name:           cmake
-Version:        2.8.2
-Release:        3%{?dist}
+Version:        2.8.4
+Release:        1%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -17,16 +17,15 @@ URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v2.8/cmake-%{version}%{?rcver}.tar.gz
 Source2:        macros.cmake
 
-# add support for Python 2.7 to FindPythonLibs.cmake (Orcan Ogetbil)
-Patch0:         cmake-2.8.2-python27.patch
-# Update FindGTK2.cmake to git version to fix bug 639058
-Patch1:         cmake-2.8.2-FindGTK2.patch
-
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gcc-gfortran
 BuildRequires:  ncurses-devel, libX11-devel
-BuildRequires:  curl-devel, expat-devel, zlib-devel
+BuildRequires:  bzip2-devel
+BuildRequires:  curl-devel
+BuildRequires:  expat-devel
+BuildRequires:  libarchive-devel
+BuildRequires:  zlib-devel
 %if %{without bootstrap}
 #BuildRequires: xmlrpc-c-devel
 %endif
@@ -57,11 +56,6 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 
 %prep
 %setup -q -n %{name}-%{version}%{?rcver}
-# Python 2.7 patch (don't use -b as the backup would get installed)
-%patch0 -p1
-%patch1 -p1
-# Fixup permissions
-find -name \*.h -o -name \*.cxx -print0 | xargs -0 chmod -x
 
 
 %build
@@ -127,26 +121,68 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/rpm/macros.cmake
 %{_datadir}/doc/%{name}-%{version}/
+%if %{with gui}
+%exclude %{_datadir}/doc/%{name}-%{version}/cmake-gui.*
+%endif
 %{_bindir}/ccmake
 %{_bindir}/cmake
 %{_bindir}/cpack
 %{_bindir}/ctest
 %{_datadir}/%{name}/
-%{_mandir}/man1/*.1*
+%{_mandir}/man1/ccmake.1.gz
+%{_mandir}/man1/cmake.1.gz
+%{_mandir}/man1/cmakecommands.1.gz
+%{_mandir}/man1/cmakecompat.1.gz
+%{_mandir}/man1/cmakemodules.1.gz
+%{_mandir}/man1/cmakepolicies.1.gz
+%{_mandir}/man1/cmakeprops.1.gz
+%{_mandir}/man1/cmakevars.1.gz
+%{_mandir}/man1/cpack.1.gz
+%{_mandir}/man1/ctest.1.gz
 %{_datadir}/emacs/
 %{_libdir}/%{name}/
 
 %if %{with gui}
 %files gui
 %defattr(-,root,root,-)
+%{_datadir}/doc/%{name}-%{version}/cmake-gui.*
 %{_bindir}/cmake-gui
 %{_datadir}/applications/CMake.desktop
 %{_datadir}/mime/packages/cmakecache.xml
 %{_datadir}/pixmaps/CMakeSetup32.png
+%{_mandir}/man1/cmake-gui.1.gz
 %endif
 
 
 %changelog
+* Thu Feb 17 2011 Orion Poplawski <orion@cora.nwra.com> - 2.8.4-1
+- Update to 2.8.4 final
+
+* Wed Feb 2 2011 Orion Poplawski <orion@cora.nwra.com> - 2.8.4-0.2.rc2
+- Update to 2.8.4 RC 2
+
+* Tue Jan 18 2011 Orion Poplawski <orion@cora.nwra.com> - 2.8.4-0.1.rc1
+- Update to 2.8.4 RC 1
+- Drop qt4 patch
+
+* Thu Dec 16 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.3-2
+- Add patch from upstream git to fix bug 652886 (qt3/qt4 detection)
+
+* Thu Nov 4 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.3-1
+- Update to 2.8.3 final
+
+* Mon Nov 1 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.3-0.3.rc4
+- Update to 2.8.3 RC 4
+- Drop python 2.7 patch fixed upstream
+- No need to fixup source file permissions anymore
+
+* Fri Oct 22 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.3-0.2.rc3
+- Update to 2.8.3 RC 3
+
+* Thu Sep 16 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.3-0.1.rc1
+- Update to 2.8.3 RC 1
+- Add BR bzip2-devel and libarchive-devel
+
 * Thu Oct 7 2010 Orion Poplawski <orion@cora.nwra.com> - 2.8.2-3
 - Update FindGTK2 to latest git to fix bug 639058
 - Disable ModuleNotices - barfs on fixed typo in FindGTK2
