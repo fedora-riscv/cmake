@@ -7,8 +7,8 @@
 %define rcver %{nil}
 
 Name:           cmake
-Version:        2.8.7
-Release:        5%{?dist}
+Version:        2.8.8
+Release:        1%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -18,6 +18,9 @@ Source0:        http://www.cmake.org/files/v2.8/cmake-%{version}%{?rcver}.tar.gz
 Source2:        macros.cmake
 # Patch to find DCMTK in Fedora (bug #720140)
 Patch0:         cmake-dcmtk.patch
+# (modified) Upstream patch to fix setting PKG_CONFIG_FOUND (bug #812188)
+Patch1:         cmake-pkgconfig.patch
+
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -43,7 +46,7 @@ CMake is used to control the software compilation process using simple
 platform and compiler independent configuration files. CMake generates 
 native makefiles and workspaces that can be used in the compiler 
 environment of your choice. CMake is quite sophisticated: it is possible 
-to support complex environments requiring system configuration, pre-processor 
+to support complex environments requiring system configuration, preprocessor
 generation, code generation, and template instantiation.
 
 
@@ -59,6 +62,7 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 %prep
 %setup -q -n %{name}-%{version}%{?rcver}
 %patch0 -p1 -b .dcmtk
+%patch1 -p1 -b .pkgconfig
 
 
 %build
@@ -80,7 +84,7 @@ pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT/%{_datadir}/%{name}/Modules -type f | xargs chmod -x
 popd
-cp -a Example $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{version}/
+cp -a Example $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
 install -m 0644 Docs/cmake-mode.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
 # RPM macros
@@ -104,6 +108,7 @@ pushd build
 #CMake.HTML currently requires internet access
 #CTestTestUpload requires internet access
 bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload %{?_smp_mflags}
+popd
 
 
 %clean
@@ -124,9 +129,9 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 %files
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/rpm/macros.cmake
-%{_datadir}/doc/%{name}-%{version}/
+%{_docdir}/%{name}-%{version}/
 %if %{with gui}
-%exclude %{_datadir}/doc/%{name}-%{version}/cmake-gui.*
+%exclude %{_docdir}/%{name}-%{version}/cmake-gui.*
 %endif
 %{_bindir}/ccmake
 %{_bindir}/cmake
@@ -150,7 +155,7 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 %if %{with gui}
 %files gui
 %defattr(-,root,root,-)
-%{_datadir}/doc/%{name}-%{version}/cmake-gui.*
+%{_docdir}/%{name}-%{version}/cmake-gui.*
 %{_bindir}/cmake-gui
 %{_datadir}/applications/CMake.desktop
 %{_datadir}/mime/packages/cmakecache.xml
@@ -160,8 +165,26 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
-* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.7-5
-- Rebuilt for c++ ABI breakage
+* Thu Apr 20 2012 Lukas Tinkl <ltinkl@redhat.com> - 2.8.8-1
+- Update to 2.8.8 final
+
+* Sat Apr 14 2012 Rex Dieter <rdieter@fedoraproject.org> 2.8.8-0.4.rc2
+- adjust pkgconfig patch (#812188)
+
+* Fri Apr 13 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.8-0.3.rc2
+- Add upstream patch to set PKG_CONFIG_FOUND (bug #812188)
+
+* Mon Apr 9 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.8-0.2.rc2
+- Update to 2.8.8 RC 2
+
+* Fri Mar 23 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.8-0.1.rc1
+- Update to 2.8.8 RC 1
+
+* Tue Feb 21 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.7-6
+- Just strip CMAKE_INSTALL_LIBDIR from %%cmake macro
+
+* Tue Feb 21 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.7-5
+- Strip CMAKE_INSTALL_LIBDIR and others from %%cmake macro (bug 795542)
 
 * Thu Jan 26 2012 Tomas Bzatek <tbzatek@redhat.com> - 2.8.7-4
 - Rebuilt for new libarchive
