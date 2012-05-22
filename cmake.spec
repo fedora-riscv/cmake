@@ -8,11 +8,15 @@
 
 Name:           cmake
 Version:        2.8.8
-Release:        1%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
-License:        BSD
+# most sources are BSD
+# Source/CursesDialog/form/ a bunch is MIT 
+# Source/kwsys/MD5.c is zlib 
+# some GPL-licensed bison-generated files, these all include an exception granting redistribution under terms of your choice
+License:        BSD and MIT and zlib
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v2.8/cmake-%{version}%{?rcver}.tar.gz
 Source2:        macros.cmake
@@ -20,8 +24,10 @@ Source2:        macros.cmake
 Patch0:         cmake-dcmtk.patch
 # (modified) Upstream patch to fix setting PKG_CONFIG_FOUND (bug #812188)
 Patch1:         cmake-pkgconfig.patch
-
-
+# Patch to fix RindRuby vendor settings
+# http://public.kitware.com/Bug/view.php?id=12965
+# https://bugzilla.redhat.com/show_bug.cgi?id=822796
+Patch2:         cmake-findruby.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gcc-gfortran
@@ -31,6 +37,7 @@ BuildRequires:  curl-devel
 BuildRequires:  expat-devel
 BuildRequires:  libarchive-devel
 BuildRequires:  zlib-devel
+BuildRequires:  emacs
 %if %{without bootstrap}
 #BuildRequires: xmlrpc-c-devel
 %endif
@@ -38,8 +45,16 @@ BuildRequires:  zlib-devel
 BuildRequires: qt4-devel, desktop-file-utils
 %define qt_gui --qt-gui
 %endif
+
 Requires:       rpm
 
+%if (0%{?fedora} >= 16)
+Requires: emacs-filesystem >= %{_emacs_version}
+%endif
+
+# Source/kwsys/MD5.c
+# see https://fedoraproject.org/wiki/Packaging:No_Bundled_Libraries
+Provides: bundled(md5-deutsch)
 
 %description
 CMake is used to control the software compilation process using simple 
@@ -63,6 +78,7 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 %setup -q -n %{name}-%{version}%{?rcver}
 %patch0 -p1 -b .dcmtk
 %patch1 -p1 -b .pkgconfig
+%patch2 -p1 -b .findruby
 
 
 %build
@@ -79,19 +95,19 @@ make VERBOSE=1 %{?_smp_mflags}
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd build
-make install DESTDIR=$RPM_BUILD_ROOT
-find $RPM_BUILD_ROOT/%{_datadir}/%{name}/Modules -type f | xargs chmod -x
+make install DESTDIR=%{buildroot}
+find %{buildroot}/%{_datadir}/%{name}/Modules -type f | xargs chmod -x
 popd
-cp -a Example $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp
-install -m 0644 Docs/cmake-mode.el $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/
+cp -a Example %{buildroot}%{_docdir}/%{name}-%{version}/
+mkdir -p %{buildroot}%{_emacs_sitelispdir}/%{name}
+install -m 0644 Docs/cmake-mode.el %{buildroot}%{_emacs_sitelispdir}/%{name}
+%{_emacs_bytecompile} %{buildroot}%{_emacs_sitelispdir}/%{name}/cmake-mode.el
 # RPM macros
-install -p -m0644 -D %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.cmake
-sed -i -e "s|@@CMAKE_VERSION@@|%{version}|" $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.cmake
-touch -r %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.cmake
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}
+install -p -m0644 -D %{SOURCE2} %{buildroot}%{_sysconfdir}/rpm/macros.cmake
+sed -i -e "s|@@CMAKE_VERSION@@|%{version}|" %{buildroot}%{_sysconfdir}/rpm/macros.cmake
+touch -r %{SOURCE2} %{buildroot}%{_sysconfdir}/rpm/macros.cmake
+mkdir -p %{buildroot}%{_libdir}/%{name}
 
 %if %{with gui}
 # Desktop file
@@ -111,10 +127,6 @@ bin/ctest -V -E ModuleNotices -E CMake.HTML -E CTestTestUpload %{?_smp_mflags}
 popd
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %if %{with gui}
 %post gui
 update-desktop-database &> /dev/null || :
@@ -127,7 +139,6 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %files
-%defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/rpm/macros.cmake
 %{_docdir}/%{name}-%{version}/
 %if %{with gui}
@@ -149,12 +160,11 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 %{_mandir}/man1/cmakevars.1.gz
 %{_mandir}/man1/cpack.1.gz
 %{_mandir}/man1/ctest.1.gz
-%{_datadir}/emacs/
+%{_emacs_sitelispdir}/%{name}
 %{_libdir}/%{name}/
 
 %if %{with gui}
 %files gui
-%defattr(-,root,root,-)
 %{_docdir}/%{name}-%{version}/cmake-gui.*
 %{_bindir}/cmake-gui
 %{_datadir}/applications/CMake.desktop
@@ -165,6 +175,15 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Mon May 21 2012 Orion Poplawski <orion@cora.nwra.com> 2.8.8-4
+- Add patch to fix FindRuby (bug 822796)
+
+* Thu May 10 2012 Rex Dieter <rdieter@fedoraproject.org> 2.8.8-3
+- Incorrect license tag in spec file (#820334)
+
+* Thu May 3 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.8-2
+- Comply with Emacs packaging guidlines (bug #818658)
+
 * Thu Apr 20 2012 Lukas Tinkl <ltinkl@redhat.com> - 2.8.8-1
 - Update to 2.8.8 final
 
