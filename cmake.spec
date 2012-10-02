@@ -7,8 +7,8 @@
 %define rcver %{nil}
 
 Name:           cmake
-Version:        2.8.8
-Release:        4%{?dist}
+Version:        2.8.9
+Release:        1%{?dist}
 Summary:        Cross-platform make system
 
 Group:          Development/Tools
@@ -22,12 +22,14 @@ Source0:        http://www.cmake.org/files/v2.8/cmake-%{version}%{?rcver}.tar.gz
 Source2:        macros.cmake
 # Patch to find DCMTK in Fedora (bug #720140)
 Patch0:         cmake-dcmtk.patch
-# (modified) Upstream patch to fix setting PKG_CONFIG_FOUND (bug #812188)
-Patch1:         cmake-pkgconfig.patch
 # Patch to fix RindRuby vendor settings
 # http://public.kitware.com/Bug/view.php?id=12965
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch2:         cmake-findruby.patch
+# Patch to fix FindPostgreSQL
+# https://bugzilla.redhat.com/show_bug.cgi?id=828467
+# http://public.kitware.com/Bug/view.php?id=13378
+Patch3:         cmake-FindPostgreSQL.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  gcc-gfortran
@@ -77,8 +79,8 @@ The %{name}-gui package contains the Qt based GUI for CMake.
 %prep
 %setup -q -n %{name}-%{version}%{?rcver}
 %patch0 -p1 -b .dcmtk
-%patch1 -p1 -b .pkgconfig
 %patch2 -p1 -b .findruby
+%patch3 -p1 -b .findpostgresql
 
 
 %build
@@ -175,6 +177,25 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 
 
 %changelog
+* Thu Aug 9 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.9-1
+- Update to 2.8.9 final
+
+* Fri Jul 27 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.9-0.4.rc3
+- Update to 2.8.9 RC 3
+
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.8.9-0.3.rc2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Mon Jul 16 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.9-0.2.rc2
+- Update to 2.8.9 RC 2
+
+* Tue Jul 10 2012 Orion Poplawski <orion@cora.nwra.com> - 2.8.9-0.1.rc1
+- Update to 2.8.9 RC 1
+- Drop pkgconfig patch
+
+* Thu Jul 5 2012 Orion Poplawski <orion@cora.nwra.com> 2.8.8-5
+- Add patch to fix FindPostgreSQL (bug 828467)
+
 * Mon May 21 2012 Orion Poplawski <orion@cora.nwra.com> 2.8.8-4
 - Add patch to fix FindRuby (bug 822796)
 
