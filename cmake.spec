@@ -94,16 +94,16 @@ BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  emacs
 %endif
+%if %{without bootstrap}
 %if %{with python3}
 %{!?python3_pkgversion: %global python3_pkgversion 3}
 BuildRequires:  python%{python3_pkgversion}-devel
 %else
 BuildRequires:  python2-devel
 %endif
-%if %{without bootstrap}
-#BuildRequires: xmlrpc-c-devel
 %endif
 %if %{without bootstrap}
+#BuildRequires: xmlrpc-c-devel
 %if %{with gui}
 %if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5)
@@ -200,7 +200,7 @@ export CXXFLAGS="%{optflags}"
 export LDFLAGS="%{?__global_ldflags}"
 mkdir build
 pushd build
-%if ! %{with_bootstrap}
+%if %{without bootstrap}
 ../bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
              --docdir=/share/doc/%{name} --mandir=/share/man \
              --%{?with_bootstrap:no-}system-libs \
