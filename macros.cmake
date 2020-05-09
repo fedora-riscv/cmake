@@ -6,6 +6,7 @@
 %_cmake_skip_rpath -DCMAKE_SKIP_RPATH:BOOL=ON
 %_cmake_version @@CMAKE_VERSION@@
 %__cmake /usr/bin/cmake
+%__ctest /usr/bin/ctest
 
 # - Set default compile flags
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
@@ -40,4 +41,19 @@
 %endif \
 	%{?_cmake_shared_libs}
 
+%cmake_build \
+  %__cmake --build "%{_vpath_builddir}" %{?_smp_mflags} --verbose
+
+%cmake_install \
+  DESTDIR="%{buildroot}" %__cmake --install "%{_vpath_builddir}"
+
+%ctest(:-:) \
+  cd "%{_vpath_builddir}" \
+  %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**} \
+  cd -
+
+
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
+%cmake@@CMAKE_MAJOR_VERSION@@_build %cmake_build
+%cmake@@CMAKE_MAJOR_VERSION@@_install %cmake_install
+%ctest@@CMAKE_MAJOR_VERSION@@ %ctest
