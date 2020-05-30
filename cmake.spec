@@ -414,9 +414,9 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 mv -f Modules/FindLibArchive.cmake Modules/FindLibArchive.disabled
 %endif
 pushd %{_vpath_builddir}
-# CTestTestUpload require internet access
+# CTestTestUpload, curl require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload|CPackComponentsForAll-RPM-IgnoreGroup"
+NO_TEST="CTestTestUpload|CPackComponentsForAll-RPM-IgnoreGroup|curl"
 # kwsys.testProcess-{4,5} are flaky on s390x.
 %ifarch s390x
 NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
