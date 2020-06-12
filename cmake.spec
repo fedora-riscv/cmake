@@ -55,9 +55,9 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 17
+%global minor_version 18
 # Set to RC version if building RC, else %%{nil}
-#global rcsuf rc3
+%global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
@@ -66,8 +66,8 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.3
-Release:        2%{?relsuf}%{?dist}
+Version:        %{major_version}.%{minor_version}.0
+Release:        0.1%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -142,6 +142,7 @@ BuildRequires:  libuv-devel
 BuildRequires:  rhash-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
+BuildRequires:  vim-filesystem
 %endif
 %if %{with emacs}
 BuildRequires:  emacs
@@ -203,6 +204,7 @@ Requires:       %{name}-rpm-macros = %{version}-%{release}
 Requires:       emacs-filesystem%{?_emacs_version: >= %{_emacs_version}}
 %endif
 %endif
+Requires:       vim-filesystem
 
 BuildArch:      noarch
 
@@ -311,11 +313,12 @@ do
 done
 %if %{with emacs}
 # Install emacs cmake mode
-mkdir -p %{buildroot}%{_emacs_sitelispdir}/%{name}
-install -p -m 0644 Auxiliary/cmake-mode.el %{buildroot}%{_emacs_sitelispdir}/%{name}/%{name}-mode.el
+mkdir -p %{buildroot}%{_emacs_sitelispdir}/%{name} %{buildroot}%{_emacs_sitestartdir}
+mv %{buildroot}%{_emacs_sitelispdir}/%{name}-mode.el %{buildroot}%{_emacs_sitelispdir}/%{name}
 %{_emacs_bytecompile} %{buildroot}%{_emacs_sitelispdir}/%{name}/%{name}-mode.el
-mkdir -p %{buildroot}%{_emacs_sitestartdir}
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_emacs_sitestartdir}
+%else
+rm -f %{buildroot}%{_emacs_sitelispdir}
 %endif
 # RPM macros
 install -p -m0644 -D %{SOURCE2} %{buildroot}%{rpm_macros_dir}/macros.%{name}
@@ -460,6 +463,8 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 %{_emacs_sitestartdir}
 %endif
 %endif
+%{vimfiles_root}/indent/%{name}.vim
+%{vimfiles_root}/syntax/%{name}.vim
 
 
 %files doc
@@ -497,6 +502,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Fri Jun 12 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-0.1.rc1
+- Update to 3.18.0-rc1
+
 * Sat May 30 2020 Björn Esser <besser82@fedoraproject.org> - 3.17.3-2
 - Rebuild (jsoncpp)
 
