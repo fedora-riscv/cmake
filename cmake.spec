@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        0.3%{?relsuf}%{?dist}
+Release:        0.4%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -98,7 +98,8 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-
+# Fix FindLua to support Lua 5.4
+Patch103:       %{name}-3.18.0-rc2-lua-5.4.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -502,6 +503,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Tue Jun 30 2020 Tom Callaway <spot@fedoraproject.org> - 3.18.0-0.4.rc2
+- fix FindLua to support lua 5.4
+
 * Mon Jun 29 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-0.3.rc2
 - Apply change: CMake to do out-of-source builds (#1852036)
 

@@ -1,0 +1,63 @@
+diff -up cmake-3.18.0-rc2/Modules/FindLua.cmake.lua54 cmake-3.18.0-rc2/Modules/FindLua.cmake
+--- cmake-3.18.0-rc2/Modules/FindLua.cmake.lua54	2020-06-30 14:17:05.897460893 -0400
++++ cmake-3.18.0-rc2/Modules/FindLua.cmake	2020-06-30 14:17:16.173293679 -0400
+@@ -48,7 +48,7 @@ unset(_lua_append_versions)
+ 
+ # this is a function only to have all the variables inside go away automatically
+ function(_lua_get_versions)
+-    set(LUA_VERSIONS5 5.3 5.2 5.1 5.0)
++    set(LUA_VERSIONS5 5.4 5.3 5.2 5.1 5.0)
+ 
+     if (Lua_FIND_VERSION_EXACT)
+         if (Lua_FIND_VERSION_COUNT GREATER 1)
+diff -up cmake-3.18.0-rc2/Tests/RunCMake/FindLua/FindLuaTest.cmake.lua54 cmake-3.18.0-rc2/Tests/RunCMake/FindLua/FindLuaTest.cmake
+--- cmake-3.18.0-rc2/Tests/RunCMake/FindLua/FindLuaTest.cmake.lua54	2020-06-30 14:17:44.756828608 -0400
++++ cmake-3.18.0-rc2/Tests/RunCMake/FindLua/FindLuaTest.cmake	2020-06-30 14:18:20.411248461 -0400
+@@ -59,15 +59,15 @@ function(test_path prefix_path lua_path
+ endfunction()
+ 
+ # Simple test
+-test_path(prefix1 prefix1/include 5.3)
++test_path(prefix1 prefix1/include 5.4)
+ # Find highest version
+-test_path(prefix2 prefix2/include/lua5.3 5.3)
+-foreach(ver 5.3 5.2 5.1)
++test_path(prefix2 prefix2/include/lua5.4 5.4)
++foreach(ver 5.4 5.3 5.2 5.1)
+     # At least X or X.0 -> Highest
+     set(VERSION "${ver}")
+-    test_path(prefix2 prefix2/include/lua5.3 5.3)
++    test_path(prefix2 prefix2/include/lua5.4 5.4)
+     set(VERSION "${ver}.0")
+-    test_path(prefix2 prefix2/include/lua5.3 5.3)
++    test_path(prefix2 prefix2/include/lua5.4 5.4)
+     # Exactly X/X.0
+     set(VERSION "${ver}" EXACT)
+     test_path(prefix2 prefix2/include/lua${ver} ${ver})
+diff -up cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix2/include/lua5.4/lua.h.lua54 cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix2/include/lua5.4/lua.h
+--- cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix2/include/lua5.4/lua.h.lua54	2020-06-30 14:19:19.646284675 -0400
++++ cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix2/include/lua5.4/lua.h	2020-06-30 14:19:11.988409288 -0400
+@@ -0,0 +1,8 @@
++
++#define LUA_VERSION_MAJOR "5"
++#define LUA_VERSION_MINOR "4"
++#define LUA_VERSION_NUM 504
++#define LUA_VERSION_RELEASE "0"
++
++#define LUA_VERSION "Lua " LUA_VERSION_MAJOR "." LUA_VERSION_MINOR
++#define LUA_RELEASE LUA_VERSION "." LUA_VERSION_RELEASE
+diff -up cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix1/include/lua.h.lua54 cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix1/include/lua.h
+--- cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix1/include/lua.h.lua54	2020-06-30 15:05:35.332154492 -0400
++++ cmake-3.18.0-rc2/Tests/RunCMake/FindLua/prefix1/include/lua.h	2020-06-30 15:05:51.201899127 -0400
+@@ -1,8 +1,8 @@
+ 
+ #define LUA_VERSION_MAJOR "5"
+-#define LUA_VERSION_MINOR "3"
+-#define LUA_VERSION_NUM 503
+-#define LUA_VERSION_RELEASE "4"
++#define LUA_VERSION_MINOR "4"
++#define LUA_VERSION_NUM 504
++#define LUA_VERSION_RELEASE "0"
+ 
+ #define LUA_VERSION "Lua " LUA_VERSION_MAJOR "." LUA_VERSION_MINOR
+ #define LUA_RELEASE LUA_VERSION "." LUA_VERSION_RELEASE
