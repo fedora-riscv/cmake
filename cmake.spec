@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        0.4%{?relsuf}%{?dist}
+Release:        0.5%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -503,6 +503,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Wed Jul 01 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.18.0-0.5.rc2
+- Undo out-of-source-builds
+
 * Tue Jun 30 2020 Tom Callaway <spot@fedoraproject.org> - 3.18.0-0.4.rc2
 - fix FindLua to support lua 5.4
 
