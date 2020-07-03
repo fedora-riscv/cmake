@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        1%{?relsuf}%{?dist}
+Release:        1%{?relsuf}%{?dist}.1
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -501,6 +501,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Sat Jul 18 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.18.0-1.1
+- Enable out-of-source builds by default
+
 * Thu Jul 16 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-1
 - Update to 3.18.0
 
