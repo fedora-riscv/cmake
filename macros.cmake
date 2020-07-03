@@ -7,8 +7,7 @@
 %_cmake_version @@CMAKE_VERSION@@
 %__cmake /usr/bin/cmake
 %__ctest /usr/bin/ctest
-%__cmake_out_of_source_build 0
-%__cmake_builddir %[%{?__cmake_out_of_source_build} ? "%{_vpath_builddir}" : "."]
+%__cmake_builddir %{!?__cmake_in_source_build:"%{_vpath_builddir}"}%{?__cmake_in_source_build:"."}
 
 # - Set default compile flags
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
