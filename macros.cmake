@@ -6,6 +6,9 @@
 %_cmake_skip_rpath -DCMAKE_SKIP_RPATH:BOOL=ON
 %_cmake_version @@CMAKE_VERSION@@
 %__cmake /usr/bin/cmake
+%__ctest /usr/bin/ctest
+%__cmake_in_source_build 1
+%__cmake_builddir %{!?__cmake_in_source_build:%{_vpath_builddir}}%{?__cmake_in_source_build:.}
 
 # - Set default compile flags
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
@@ -24,6 +27,8 @@
   %{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;} \
 %endif \
   %__cmake \\\
+        -S "%{_vpath_srcdir}" \\\
+        -B "%{__cmake_builddir}" \\\
         -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
@@ -36,6 +41,21 @@
 %if "%{?_lib}" == "lib64" \
         %{?_cmake_lib_suffix64} \\\
 %endif \
-	%{?_cmake_shared_libs}
+        %{?_cmake_shared_libs}
+
+%cmake_build \
+  %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+
+%cmake_install \
+  DESTDIR="%{buildroot}" %__cmake --install "%{__cmake_builddir}"
+
+%ctest(:-:) \
+  cd "%{__cmake_builddir}" \
+  %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**} \
+  cd -
+
 
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
+%cmake@@CMAKE_MAJOR_VERSION@@_build %cmake_build
+%cmake@@CMAKE_MAJOR_VERSION@@_install %cmake_install
+%ctest@@CMAKE_MAJOR_VERSION@@ %ctest
