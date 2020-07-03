@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        0.5%{?relsuf}%{?dist}
+Release:        0.6%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -503,6 +503,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Fri Jul 03 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.18.0-0.6.rc2
+- Add out-of-source builds controlled by a macro (%%__cmake_out_of_source_build)
+
 * Wed Jul 01 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.18.0-0.5.rc2
 - Undo out-of-source-builds
 
