@@ -57,7 +57,7 @@
 %global major_version 3
 %global minor_version 18
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc3
+#global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        0.8%{?relsuf}%{?dist}
+Release:        1%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -98,8 +98,6 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-# Fix FindLua to support Lua 5.4
-Patch103:       %{name}-3.18.0-rc2-lua-5.4.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -503,6 +501,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Thu Jul 16 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-1
+- Update to 3.18.0
+
 * Sat Jul 04 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-0.8.rc3
 - Update to 3.18.0-rc3
 
