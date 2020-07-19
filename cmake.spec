@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.3
-Release:        2%{?relsuf}%{?dist}
+Release:        3%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -493,6 +493,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Sun Jul 19 2020 Neal Gompa <ngompa13@gmail.com> - 3.17.3-3
+- Make in-source builds behave like before
+
 * Fri Jul 03 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.17.3-2
 - Add %%cmake_build/%%cmake_install/%%ctest macros
 - Add %%__cmake_in_source_build macro to control in-source/out-of-source builds
