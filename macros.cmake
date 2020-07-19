@@ -26,8 +26,8 @@
   %{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;} \
 %endif \
   %__cmake \\\
-        -S "%{_vpath_srcdir}" \\\
-        -B "%{__cmake_builddir}" \\\
+        %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
+        %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} \\\
         -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
