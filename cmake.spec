@@ -61,13 +61,16 @@
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
+# For handling bump release by rpmdev-bumpspec and mass rebuild
+%global baserelease 2
+
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        1%{?relsuf}%{?dist}.1
+Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -501,6 +504,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Sun Jul 19 2020 Neal Gompa <ngompa13@gmail.com> - 3.18.0-2
+- Make in-source builds behave like before
+
 * Sat Jul 18 2020 Igor Raits <ignatenkobrain@fedoraproject.org> - 3.18.0-1.1
 - Enable out-of-source builds by default
 
