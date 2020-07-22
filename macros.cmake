@@ -51,7 +51,7 @@
 
 %ctest(:-:) \
   cd "%{__cmake_builddir}" \
-  %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**} \
+  %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} --verbose %{**} \
   cd -
 
 
