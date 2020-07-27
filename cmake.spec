@@ -62,7 +62,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -504,6 +504,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 3.18.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Wed Jul 22 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.0-3
 - Default to --verbose for ctest as well
 
