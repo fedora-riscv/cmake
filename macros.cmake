@@ -57,4 +57,4 @@
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
 %cmake@@CMAKE_MAJOR_VERSION@@_build %cmake_build
 %cmake@@CMAKE_MAJOR_VERSION@@_install %cmake_install
-%ctest@@CMAKE_MAJOR_VERSION@@ %ctest
+%ctest@@CMAKE_MAJOR_VERSION@@(:-:) %ctest %{**}
