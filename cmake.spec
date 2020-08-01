@@ -62,14 +62,14 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 5
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.0
+Version:        %{major_version}.%{minor_version}.1
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -504,6 +504,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Sat Aug 01 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.1-1
+- Update to 3.18.1
+
 * Wed Jul 29 2020 Orion Poplawski <orion@nwra.com> - 3.18.0-5
 - Handle arguments for ctest3 macro
 
