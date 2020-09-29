@@ -62,7 +62,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -504,6 +504,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Tue Sep 29 2020 Christoph Junghans <junghans@votca.org> - 3.18.2-2
+- Make %ctest non-verbose by default
+
 * Thu Aug 20 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.2-1
 - Update to 3.18.2
 
