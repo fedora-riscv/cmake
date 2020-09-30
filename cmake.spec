@@ -62,14 +62,14 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.2
+Version:        %{major_version}.%{minor_version}.3
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -504,6 +504,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Wed Sep 30 12:49:57 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.3-1
+- Update to 3.18.3
+
 * Tue Sep 29 2020 Christoph Junghans <junghans@votca.org> - 3.18.2-2
 - Make %ctest non-verbose by default
 
