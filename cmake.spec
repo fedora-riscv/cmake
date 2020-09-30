@@ -174,6 +174,9 @@ Requires:       %{name}-data = %{version}-%{release}
 Requires:       %{name}-rpm-macros = %{version}-%{release}
 Requires:       %{name}-filesystem%{?_isa} = %{version}-%{release}
 
+# Explicitly require make.  (rhbz#1862014)
+Requires:       make
+
 # Provide the major version name
 Provides: %{orig_name}%{major_version} = %{version}-%{release}
 
@@ -495,6 +498,7 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 %changelog
 * Wed Sep 30 13:08:53 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.17.4-2
 - Make %ctest non-verbose by default
+- Explicitly require make
 
 * Sat Aug 01 2020 Björn Esser <besser82@fedoraproject.org> - 3.17.4-1
 - Update to cmake-3.17.4
