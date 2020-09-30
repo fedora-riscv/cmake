@@ -101,6 +101,8 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
+# rhbz#1871346
+Patch103:       %{name}-3.18.3-findblas.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -510,6 +512,7 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 * Wed Sep 30 12:49:57 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.3-1
 - Update to 3.18.3
 - Explicitly require make
+- Add patch to support FlexiBLAS
 
 * Tue Sep 29 2020 Christoph Junghans <junghans@votca.org> - 3.18.2-2
 - Make %ctest non-verbose by default
