@@ -67,7 +67,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.4
-Release:        1%{?relsuf}%{?dist}
+Release:        2%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -493,6 +493,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Wed Sep 30 13:05:42 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.17.4-2
+- Make %ctest non-verbose by default
+
 * Sat Aug 01 2020 Björn Esser <besser82@fedoraproject.org> - 3.17.4-1
 - Update to cmake-3.17.4
 
