@@ -62,7 +62,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -103,6 +103,9 @@ Patch101:       %{name}-fedora-flag_release.patch
 Patch102:       %{name}-mingw-dl.patch
 # rhbz#1871346
 Patch103:       %{name}-3.18.3-findblas.patch
+# Add Python 3.10 to the hadcoded lists of Python versions
+Patch104:       https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5383.patch
+Patch105:       https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5482.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -509,6 +512,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Mon Nov 09 2020 Miro Hrončok <mhroncok@redhat.com> - 3.18.4-2
+- Add support for Python 3.10
+
 * Tue Oct 13 10:03:16 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.4-1
 - Update to 3.18.4
 
