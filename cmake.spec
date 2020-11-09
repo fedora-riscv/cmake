@@ -39,6 +39,14 @@
 %bcond_without sphinx
 %endif
 
+%if !0%{?rhel}
+%bcond_with bundled_jsoncpp
+%bcond_with bundled_rhash
+%else
+%bcond_without bundled_jsoncpp
+%bcond_without bundled_rhash
+%endif
+
 # Run tests
 %bcond_without test
 
@@ -62,7 +70,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -139,14 +147,22 @@ BuildRequires:  %{_bindir}/sphinx-build
 BuildRequires:  bzip2-devel
 BuildRequires:  curl-devel
 BuildRequires:  expat-devel
+%if %{with bundled_jsoncpp}
+Provides: bundled(jsoncpp)
+%else
 BuildRequires:  jsoncpp-devel
+%endif
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  libarchive-devel
 %else
 BuildRequires:  libarchive3-devel
 %endif
 BuildRequires:  libuv-devel
+%if %{with bundled_rhash}
+Provides:  bundled(rhash)
+%else
 BuildRequires:  rhash-devel
+%endif
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  vim-filesystem
@@ -295,6 +311,12 @@ $SRCDIR/bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
                   --docdir=/share/doc/%{name} --mandir=/share/man \
                   --%{?with_bootstrap:no-}system-libs \
                   --parallel=`/usr/bin/getconf _NPROCESSORS_ONLN` \
+%if %{with bundled_rhash}
+                  --no-system-librhash \
+%endif
+%if %{with bundled_jsoncpp}
+                  --no-system-jsoncpp \
+%endif
 %if %{with sphinx}
                   --sphinx-man --sphinx-html \
 %else
@@ -512,6 +534,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Tue Dec 15 2020 Tom Stellard <tstellar@redhat.com> - 3.18.4-4
+- Update BuildRequires for eln
+
 * Fri Nov 20 08:32:34 EST 2020 Neal Gompa <ngompa13@gmail.com> - 3.18.4-3
 - Ensure CMake does not strip binaries with package builds
 
