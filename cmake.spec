@@ -62,7 +62,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -512,6 +512,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Fri Nov 20 08:32:34 EST 2020 Neal Gompa <ngompa13@gmail.com> - 3.18.4-3
+- Ensure CMake does not strip binaries with package builds
+
 * Mon Nov 09 2020 Miro Hrončok <mhroncok@redhat.com> - 3.18.4-2
 - Add support for Python 3.10
 

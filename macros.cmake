@@ -13,6 +13,7 @@
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
 # and default to -O3 -DNDEBUG.  Strip the -O3 so we can override with *FLAGS
 # - Turn on verbose makefiles so we can see and verify compile flags
+# - Turn off stripping by default so RPM can do it separately
 # - Set default install prefixes and library install directories
 # - Turn on shared libraries by default
 %cmake \
@@ -32,6 +33,7 @@
         -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \\\
+        -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF \\\
         -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \\\
         -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} \\\
         -DLIB_INSTALL_DIR:PATH=%{_libdir} \\\
