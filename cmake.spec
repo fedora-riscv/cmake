@@ -193,6 +193,7 @@ BuildRequires: desktop-file-utils
 # Ensure we have our own rpm-macros in place during build.
 BuildRequires:  %{name}-rpm-macros
 %endif
+BuildRequires: make
 
 Requires:       %{name}-data = %{version}-%{release}
 Requires:       %{name}-rpm-macros = %{version}-%{release}
