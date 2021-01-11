@@ -63,21 +63,21 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 18
+%global minor_version 19
 # Set to RC version if building RC, else %%{nil}
 #global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 4
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.4
+Version:        %{major_version}.%{minor_version}.2
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -109,11 +109,6 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-# rhbz#1871346
-Patch103:       %{name}-3.18.3-findblas.patch
-# Add Python 3.10 to the hadcoded lists of Python versions
-Patch104:       https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5383.patch
-Patch105:       https://gitlab.kitware.com/cmake/cmake/-/merge_requests/5482.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -535,6 +530,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Mon Jan 11 2021 Cristian Morales Vega <christian.morales.vega@gmail.com> - 3.19.2-1
+- Update to 3.19.2
+
 * Tue Dec 15 2020 Tom Stellard <tstellar@redhat.com> - 3.18.4-4
 - Update BuildRequires for eln
 
