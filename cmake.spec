@@ -117,6 +117,9 @@ Patch1:      %{name}-rename.patch
 Patch2:      %{name}-libarchive3.patch
 %endif
 %endif
+# memory-hungry tests when building on koji builders with *lots* of cores
+# so limit it to some reasonable number (4)
+Patch3:      cmake-3.19-CPACK_ARCHIVE_THREADS.patch
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -456,15 +459,9 @@ NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
 %endif
-%ifarch %{ix86}
-# one test (sometimes?) runs out of memory, so limit parallelism as a workaround -- rdieter
-%global smp_mflags -j2
-%else
-%global smp_mflags %{?smp_mflags}
-%endif
-bin/ctest%{?name_suffix} %{?smp_mflags} -V -E "$NO_TEST" --output-on-failure
+bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 # Keep an eye on failing tests
-bin/ctest%{?name_suffix} %{?smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
+bin/ctest%{?name_suffix} %{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
 popd
 %if 0%{?rhel} && 0%{?rhel} <= 6
 mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
