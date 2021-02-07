@@ -70,7 +70,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -109,6 +109,11 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
+# memory-hungry tests when building on koji builders with *lots* of cores
+# so limit it to some reasonable number (4)
+Patch103:       cmake-3.19-CPACK_ARCHIVE_THREADS.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1925355
+Patch104:       0572-FindBoost-Add-support-for-Boost-1.75.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -117,9 +122,6 @@ Patch1:      %{name}-rename.patch
 Patch2:      %{name}-libarchive3.patch
 %endif
 %endif
-# memory-hungry tests when building on koji builders with *lots* of cores
-# so limit it to some reasonable number (4)
-Patch3:      cmake-3.19-CPACK_ARCHIVE_THREADS.patch
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -533,6 +535,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Sat Feb 06 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.4-2
+- CMake warning when searching for Boost 1.75 (#1925355)
+
 * Thu Jan 28 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.4-1
 - cmake-3.19.4
 
