@@ -77,7 +77,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.4
+Version:        %{major_version}.%{minor_version}.6
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -112,8 +112,6 @@ Patch102:       %{name}-mingw-dl.patch
 # memory-hungry tests when building on koji builders with *lots* of cores
 # so limit it to some reasonable number (4)
 Patch103:       cmake-3.19-CPACK_ARCHIVE_THREADS.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1925355
-Patch104:       0572-FindBoost-Add-support-for-Boost-1.75.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -535,6 +533,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Thu Feb 25 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.6-2
+- cmake-3.19.6
+
 * Sat Feb 06 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.4-2
 - CMake warning when searching for Boost 1.75 (#1925355)
 
