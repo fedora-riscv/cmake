@@ -70,14 +70,14 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.6
+Version:        %{major_version}.%{minor_version}.7
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -533,6 +533,9 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Mon Mar 15 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.7-1
+- cmake-3.19.7
+
 * Thu Feb 25 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.6-2
 - cmake-3.19.6
 
