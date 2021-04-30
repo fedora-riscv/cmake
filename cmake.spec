@@ -32,12 +32,7 @@
 # Enable RPM dependency generators for cmake files written in Python
 %bcond_without rpm
 
-# Sphinx-build cannot import CMakeLexer on EPEL <= 6
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%bcond_with sphinx
-%else
 %bcond_without sphinx
-%endif
 
 %if !0%{?rhel}
 %bcond_with bundled_jsoncpp
@@ -63,7 +58,7 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 19
+%global minor_version 20
 # Set to RC version if building RC, else %%{nil}
 #global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
@@ -77,7 +72,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.7
+Version:        %{major_version}.%{minor_version}.2
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -105,20 +100,19 @@ Source5:        %{name}.req
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch100:       %{name}-findruby.patch
 # replace release flag -O3 with -O2 for fedora
+%if 0%{?fedora} < 34
 Patch101:       %{name}-fedora-flag_release.patch
+%endif
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
 # memory-hungry tests when building on koji builders with *lots* of cores
 # so limit it to some reasonable number (4)
-Patch103:       cmake-3.19-CPACK_ARCHIVE_THREADS.patch
+Patch103:       cmake-3.20-CPACK_THREADS.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
 Patch1:      %{name}-rename.patch
-%if 0%{?rhel} && 0%{?rhel} <= 6
-Patch2:      %{name}-libarchive3.patch
-%endif
 %endif
 
 BuildRequires:  coreutils
@@ -177,7 +171,6 @@ BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python2-devel
 %endif
 %endif
-#BuildRequires: xmlrpc-c-devel
 %if %{with gui}
 %if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5Widgets)
@@ -186,6 +179,9 @@ BuildRequires: pkgconfig(QtGui)
 %endif
 BuildRequires: desktop-file-utils
 %endif
+
+BuildRequires: pkgconfig(bash-completion)
+%global bash_completionsdir %(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo '%{_datadir}/bash-completion/completions')
 
 %if %{without bootstrap}
 # Ensure we have our own rpm-macros in place during build.
@@ -309,7 +305,7 @@ pushd %{_vpath_builddir}
 $SRCDIR/bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
                   --docdir=/share/doc/%{name} --mandir=/share/man \
                   --%{?with_bootstrap:no-}system-libs \
-                  --parallel=`/usr/bin/getconf _NPROCESSORS_ONLN` \
+                  --parallel="$(echo %{?_smp_mflags} | sed -e 's|-j||g')" \
 %if %{with bundled_rhash}
                   --no-system-librhash \
 %endif
@@ -336,12 +332,7 @@ find %{buildroot}%{_datadir}/%{name}/Modules -type f | xargs chmod -x
   exit 1
 # Install major_version name links
 %{!?name_suffix:for f in ccmake cmake cpack ctest; do ln -s $f %{buildroot}%{_bindir}/${f}%{major_version}; done}
-# Install bash completion symlinks
-mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
-for f in %{buildroot}%{_datadir}/%{name}/completions/*
-do
-  ln -s ../../%{name}/completions/$(basename $f) %{buildroot}%{_datadir}/bash-completion/completions
-done
+
 %if %{with emacs}
 # Install emacs cmake mode
 mkdir -p %{buildroot}%{_emacs_sitelispdir}/%{name} %{buildroot}%{_emacs_sitestartdir}
@@ -444,13 +435,10 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 
 %if %{with test}
 %check
-%if 0%{?rhel} && 0%{?rhel} <= 6
-mv -f Modules/FindLibArchive.cmake Modules/FindLibArchive.disabled
-%endif
 pushd %{_vpath_builddir}
 # CTestTestUpload require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload|CPackComponentsForAll-RPM-IgnoreGroup"
+NO_TEST="CTestTestUpload|CPackComponentsForAll-RPM-IgnoreGroup|CPack_RPM.DEBUGINFO"
 # kwsys.testProcess-{4,5} are flaky on s390x.
 %ifarch s390x
 NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
@@ -460,12 +448,10 @@ NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
 NO_TEST="$NO_TEST|curl"
 %endif
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
+## do this only periodically, not for every build -- rdieter 20210429
 # Keep an eye on failing tests
-bin/ctest%{?name_suffix} %{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
+#bin/ctest%{?name_suffix} %{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
 popd
-%if 0%{?rhel} && 0%{?rhel} <= 6
-mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
-%endif
 %endif
 
 
@@ -484,7 +470,7 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 %files data -f data_files.mf
 %{_datadir}/aclocal/%{name}.m4
-%{_datadir}/bash-completion
+%{bash_completionsdir}/c*
 %if %{with emacs}
 %if 0%{?fedora} || 0%{?rhel} >= 7
 %{_emacs_sitelispdir}/%{name}
@@ -533,6 +519,13 @@ mv -f Modules/FindLibArchive.disabled Modules/FindLibArchive.cmake
 
 
 %changelog
+* Thu Apr 29 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.2-1
+- cmake-3.20.2 (#1942118)
+- bash-completion fixes (#1924340)
+- Release build type optimization options differ from upstream package (#1751155)
+- parse parallel build from %%_smp_mflags instead of _NPROCESSORS_ONLN
+- drop old dist references (rhel6)
+
 * Mon Mar 15 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.19.7-1
 - cmake-3.19.7
 

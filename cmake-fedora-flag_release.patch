@@ -101,58 +101,6 @@ Index: cmake-3.17.0-rc1/Modules/Compiler/PGI.cmake
    string(APPEND CMAKE_${lang}_FLAGS_RELWITHDEBINFO_INIT " -O2 -gopt")
  
    if(CMAKE_HOST_WIN32)
-Index: cmake-3.17.0-rc1/Modules/Compiler/SunPro-ASM.cmake
-===================================================================
---- cmake-3.17.0-rc1.orig/Modules/Compiler/SunPro-ASM.cmake
-+++ cmake-3.17.0-rc1/Modules/Compiler/SunPro-ASM.cmake
-@@ -11,7 +11,7 @@ set(CMAKE_SHARED_LIBRARY_SONAME_ASM_FLAG
- string(APPEND CMAKE_ASM_FLAGS_INIT " ")
- string(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT " -g")
- string(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT " -xO2 -xspace -DNDEBUG")
--string(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT " -xO3 -DNDEBUG")
-+string(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT " -xO2 -DNDEBUG")
- string(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT " -g -xO2 -DNDEBUG")
- 
- # Initialize ASM link type selection flags.  These flags are used when
-Index: cmake-3.17.0-rc1/Modules/Compiler/SunPro-C.cmake
-===================================================================
---- cmake-3.17.0-rc1.orig/Modules/Compiler/SunPro-C.cmake
-+++ cmake-3.17.0-rc1/Modules/Compiler/SunPro-C.cmake
-@@ -19,7 +19,7 @@ set(CMAKE_SHARED_LIBRARY_SONAME_C_FLAG "
- string(APPEND CMAKE_C_FLAGS_INIT " ")
- string(APPEND CMAKE_C_FLAGS_DEBUG_INIT " -g")
- string(APPEND CMAKE_C_FLAGS_MINSIZEREL_INIT " -xO2 -xspace -DNDEBUG")
--string(APPEND CMAKE_C_FLAGS_RELEASE_INIT " -xO3 -DNDEBUG")
-+string(APPEND CMAKE_C_FLAGS_RELEASE_INIT " -xO2 -DNDEBUG")
- string(APPEND CMAKE_C_FLAGS_RELWITHDEBINFO_INIT " -g -xO2 -DNDEBUG")
- 
- set(CMAKE_DEPFILE_FLAGS_C "-xMD -xMF <DEPFILE>")
-Index: cmake-3.17.0-rc1/Modules/Compiler/SunPro-CXX.cmake
-===================================================================
---- cmake-3.17.0-rc1.orig/Modules/Compiler/SunPro-CXX.cmake
-+++ cmake-3.17.0-rc1/Modules/Compiler/SunPro-CXX.cmake
-@@ -19,7 +19,7 @@ set(CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG
- string(APPEND CMAKE_CXX_FLAGS_INIT " ")
- string(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " -g")
- string(APPEND CMAKE_CXX_FLAGS_MINSIZEREL_INIT " -xO2 -xspace -DNDEBUG")
--string(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " -xO3 -DNDEBUG")
-+string(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " -xO2 -DNDEBUG")
- string(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT " -g -xO2 -DNDEBUG")
- 
- set(CMAKE_DEPFILE_FLAGS_CXX "-xMD -xMF <DEPFILE>")
-Index: cmake-3.17.0-rc1/Modules/Compiler/SunPro-Fortran.cmake
-===================================================================
---- cmake-3.17.0-rc1.orig/Modules/Compiler/SunPro-Fortran.cmake
-+++ cmake-3.17.0-rc1/Modules/Compiler/SunPro-Fortran.cmake
-@@ -17,7 +17,7 @@ set(CMAKE_EXECUTABLE_RUNTIME_Fortran_FLA
- string(APPEND CMAKE_Fortran_FLAGS_INIT " ")
- string(APPEND CMAKE_Fortran_FLAGS_DEBUG_INIT " -g")
- string(APPEND CMAKE_Fortran_FLAGS_MINSIZEREL_INIT " -xO2 -xspace -DNDEBUG")
--string(APPEND CMAKE_Fortran_FLAGS_RELEASE_INIT " -xO3 -DNDEBUG")
-+string(APPEND CMAKE_Fortran_FLAGS_RELEASE_INIT " -xO2 -DNDEBUG")
- string(APPEND CMAKE_Fortran_FLAGS_RELWITHDEBINFO_INIT " -g -xO2 -DNDEBUG")
- set(CMAKE_Fortran_MODDIR_FLAG "-moddir=")
- set(CMAKE_Fortran_MODPATH_FLAG "-M")
 Index: cmake-3.17.0-rc1/Modules/Platform/Windows-Clang.cmake
 ===================================================================
 --- cmake-3.17.0-rc1.orig/Modules/Platform/Windows-Clang.cmake
