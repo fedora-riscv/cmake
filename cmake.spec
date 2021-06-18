@@ -109,6 +109,10 @@ Patch102:       %{name}-mingw-dl.patch
 # memory-hungry tests when building on koji builders with *lots* of cores
 # so limit it to some reasonable number (4)
 Patch103:       cmake-3.20-CPACK_THREADS.patch
+# (upstreamable)
+# https://bugzilla.redhat.com/show_bug.cgi?id=1972535
+# fix FTBFS
+Patch104:       cmake-3.20.4-glibc_libdl.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -521,6 +525,7 @@ popd
 %changelog
 * Fri Jun 18 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.4-1
 - cmake-3.20.4 (#1942118)
+- workaround libdl-related FTBFS (#1972535)
 
 * Sun May 30 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.3-1
 - cmake-3.20.3

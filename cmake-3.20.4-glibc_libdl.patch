@@ -1,0 +1,28 @@
+diff -up cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx
+--- cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl	2021-06-14 10:05:49.000000000 -0500
++++ cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx	2021-06-18 14:17:50.990852438 -0500
+@@ -8,6 +8,13 @@
+ #  include <be/kernel/OS.h> /* disable_debugger() API. */
+ #endif
+ 
++#ifdef __linux__
++#include <gnu/lib-names.h>
++#ifndef LIBDL_SO
++#define LIBDL_SO "libdl.so.2"
++#endif
++#endif
++
+ // Work-around CMake dependency scanning limitation.  This must
+ // duplicate the above list of headers.
+ #if 0
+@@ -107,8 +114,8 @@ int testDynamicLoader(int argc, char* ar
+   // This one is actually fun to test, since dlopen is by default
+   // loaded...wonder why :)
+   res += TestDynamicLoader("foobar.lib", "dlopen", 0, 1, 0);
+-  res += TestDynamicLoader("libdl.so", "dlopen", 1, 1, 1);
+-  res += TestDynamicLoader("libdl.so", "TestDynamicLoader", 1, 0, 1);
++  res += TestDynamicLoader(LIBDL_SO, "dlopen", 1, 1, 1);
++  res += TestDynamicLoader(LIBDL_SO, "TestDynamicLoader", 1, 0, 1);
+ #endif
+   // Now try on the generated library
+   std::string libname = GetLibName(KWSYS_NAMESPACE_STRING "TestDynload");
