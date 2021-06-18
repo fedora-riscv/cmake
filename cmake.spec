@@ -72,7 +72,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.3
+Version:        %{major_version}.%{minor_version}.4
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -519,6 +519,9 @@ popd
 
 
 %changelog
+* Fri Jun 18 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.4-1
+- cmake-3.20.4 (#1942118)
+
 * Sun May 30 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.3-1
 - cmake-3.20.3
 
