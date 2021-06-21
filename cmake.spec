@@ -72,7 +72,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.4
+Version:        %{major_version}.%{minor_version}.5
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -523,6 +523,9 @@ popd
 
 
 %changelog
+* Mon Jun 21 2021 Björn Esser <besser82@fedoraproject.org> - 3.20.5-1
+- cmake-3.20.5 (#1942118)
+
 * Fri Jun 18 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.20.4-1
 - cmake-3.20.4 (#1942118)
 - workaround libdl-related FTBFS (#1972535)
