@@ -58,9 +58,9 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 20
+%global minor_version 21
 # Set to RC version if building RC, else %%{nil}
-#global rcsuf rc1
+%global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
@@ -72,7 +72,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.5
+Version:        %{major_version}.%{minor_version}.0
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -106,13 +106,10 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-# memory-hungry tests when building on koji builders with *lots* of cores
-# so limit it to some reasonable number (4)
-Patch103:       cmake-3.20-CPACK_THREADS.patch
 # (upstreamable)
 # https://bugzilla.redhat.com/show_bug.cgi?id=1972535
 # fix FTBFS
-Patch104:       cmake-3.20.4-glibc_libdl.patch
+Patch103:       %{name}-3.20.4-glibc_libdl.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -442,7 +439,7 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 pushd %{_vpath_builddir}
 # CTestTestUpload require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload|CPackComponentsForAll-RPM-IgnoreGroup|CPack_RPM.DEBUGINFO"
+NO_TEST="CTestTestUpload"
 # kwsys.testProcess-{4,5} are flaky on s390x.
 %ifarch s390x
 NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
@@ -523,6 +520,9 @@ popd
 
 
 %changelog
+* Wed Jun 23 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-1.rc1
+- cmake-3.21.0-rc1 (#1975377)
+
 * Mon Jun 21 2021 Björn Esser <besser82@fedoraproject.org> - 3.20.5-1
 - cmake-3.20.5 (#1942118)
 
