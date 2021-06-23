@@ -1,21 +1,46 @@
-diff -up cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx
---- cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl	2021-06-14 10:05:49.000000000 -0500
-+++ cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx	2021-06-18 14:17:50.990852438 -0500
-@@ -8,6 +8,13 @@
+From 635ab930f6185d1ec3e4d99109e2edf0533b0d00 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
+Date: Wed, 23 Jun 2021 21:03:15 +0200
+Subject: [PATCH] testDynamicLoader: Use LIBDL_SO macro if defined.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Starting with glibc v2.34 there is no external version of libdl.so
+anymore.  It has been merged into the glibc libc.so.
+
+Assuming libdl.so will be present will break the test, thus the
+LIBDL_SO macro should be used.  If the macro is not defined on
+the system, we ensure it will be defined using the previously
+hardcoded value.
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/testDynamicLoader.cxx b/testDynamicLoader.cxx
+index 703ad4d..55a671b 100644
+--- cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl
++++ cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx
+@@ -8,6 +8,16 @@
  #  include <be/kernel/OS.h> /* disable_debugger() API. */
  #endif
  
++// Will define LIBDL_SO macro on Linux systems.
 +#ifdef __linux__
-+#include <gnu/lib-names.h>
-+#ifndef LIBDL_SO
-+#define LIBDL_SO "libdl.so.2"
++#  include <gnu/lib-names.h>
 +#endif
++
++// Define the LIBDL_SO macro, if not defined above.
++#ifndef LIBDL_SO
++#  define LIBDL_SO "libdl.so"
 +#endif
 +
  // Work-around CMake dependency scanning limitation.  This must
  // duplicate the above list of headers.
  #if 0
-@@ -107,8 +114,8 @@ int testDynamicLoader(int argc, char* ar
+@@ -107,8 +117,8 @@ int testDynamicLoader(int argc, char* argv[])
    // This one is actually fun to test, since dlopen is by default
    // loaded...wonder why :)
    res += TestDynamicLoader("foobar.lib", "dlopen", 0, 1, 0);
@@ -26,3 +51,5 @@ diff -up cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl cmake-3.20.4/Sour
  #endif
    // Now try on the generated library
    std::string libname = GetLibName(KWSYS_NAMESPACE_STRING "TestDynload");
+-- 
+2.31.1
