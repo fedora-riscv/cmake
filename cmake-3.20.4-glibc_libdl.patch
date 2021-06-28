@@ -19,17 +19,26 @@ Signed-off-by: Björn Esser <besser82@fedoraproject.org>
  cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx | 14 ++++++++++++--
  1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/testDynamicLoader.cxx b/testDynamicLoader.cxx
-index 703ad4d..55a671b 100644
---- cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx.libdl
-+++ cmake-3.20.4/Source/kwsys/testDynamicLoader.cxx
-@@ -8,6 +8,16 @@
+Index: cmake-3.21.0-rc1/Source/kwsys/testDynamicLoader.cxx
+===================================================================
+--- cmake-3.21.0-rc1.orig/Source/kwsys/testDynamicLoader.cxx
++++ cmake-3.21.0-rc1/Source/kwsys/testDynamicLoader.cxx
+@@ -8,6 +8,25 @@
  #  include <be/kernel/OS.h> /* disable_debugger() API. */
  #endif
  
-+// Will define LIBDL_SO macro on Linux systems.
++// Needed for __GLIBC__ test macro.
 +#ifdef __linux__
++#  include <features.h>
++#endif
++
++// Will define LIBDL_SO macro on systems with glibc.
++#ifdef __GLIBC__
 +#  include <gnu/lib-names.h>
++// Define to LIBC_SO, if not defined by above header.
++#  ifndef LIBDL_SO
++#    define LIBDL_SO LIBC_SO
++#  endif
 +#endif
 +
 +// Define the LIBDL_SO macro, if not defined above.
@@ -40,7 +49,7 @@ index 703ad4d..55a671b 100644
  // Work-around CMake dependency scanning limitation.  This must
  // duplicate the above list of headers.
  #if 0
-@@ -107,8 +117,8 @@ int testDynamicLoader(int argc, char* argv[])
+@@ -107,8 +126,8 @@ int testDynamicLoader(int argc, char* ar
    // This one is actually fun to test, since dlopen is by default
    // loaded...wonder why :)
    res += TestDynamicLoader("foobar.lib", "dlopen", 0, 1, 0);
@@ -51,5 +60,3 @@ index 703ad4d..55a671b 100644
  #endif
    // Now try on the generated library
    std::string libname = GetLibName(KWSYS_NAMESPACE_STRING "TestDynload");
--- 
-2.31.1
