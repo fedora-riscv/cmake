@@ -65,7 +65,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -520,6 +520,9 @@ popd
 
 
 %changelog
+* Tue Jun 29 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-2.rc1
+- Rebuilt with upstreamed cmake-3.20.4-glibc_libdl.patch
+
 * Wed Jun 23 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-1.rc1
 - cmake-3.21.0-rc1 (#1975377)
 
