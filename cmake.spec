@@ -106,10 +106,6 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-# (upstreamable)
-# https://bugzilla.redhat.com/show_bug.cgi?id=1972535
-# fix FTBFS
-Patch103:       %{name}-3.20.4-glibc_libdl.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -522,6 +518,7 @@ popd
 %changelog
 * Mon Jul 05 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-3.rc2
 - cmake-3.21.0-rc2
+- Drop libdl patch for glibc >= 2.34, as it is upstreamed
 
 * Tue Jun 29 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-2.rc1
 - Rebuilt with upstreamed cmake-3.20.4-glibc_libdl.patch
