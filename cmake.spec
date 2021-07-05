@@ -60,12 +60,12 @@
 %global major_version 3
 %global minor_version 21
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc1
+%global rcsuf rc2
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -520,6 +520,9 @@ popd
 
 
 %changelog
+* Mon Jul 05 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-3.rc2
+- cmake-3.21.0-rc2
+
 * Tue Jun 29 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-2.rc1
 - Rebuilt with upstreamed cmake-3.20.4-glibc_libdl.patch
 
