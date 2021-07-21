@@ -65,7 +65,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 5
+%global baserelease 6
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -516,6 +516,9 @@ popd
 
 
 %changelog
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 3.21.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Thu Jul 15 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.0-5
 - cmake-3.21.0
 
