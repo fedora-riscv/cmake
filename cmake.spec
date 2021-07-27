@@ -65,14 +65,14 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 6
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.0
+Version:        %{major_version}.%{minor_version}.1
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -516,6 +516,10 @@ popd
 
 
 %changelog
+* Tue Jul 27 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.1-1
+- cmake-3.21.1
+  Fixes rhbz#1986449
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 3.21.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
