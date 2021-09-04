@@ -100,7 +100,7 @@ Source5:        %{name}.req
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch100:       %{name}-findruby.patch
 # replace release flag -O3 with -O2 for fedora
-%if 0%{?fedora} < 34
+%if 0%{?fedora} && 0%{?fedora} < 34
 Patch101:       %{name}-fedora-flag_release.patch
 %endif
 # Add dl to CMAKE_DL_LIBS on MINGW
