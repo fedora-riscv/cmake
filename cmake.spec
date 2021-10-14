@@ -48,6 +48,9 @@
 # Enable X11 tests
 %bcond_without X11_test
 
+# Do not build non-lto objects to reduce build time significantly.
+%global optflags %(echo '%{optflags}' | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
+
 # Place rpm-macros into proper location
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -519,6 +522,7 @@ popd
 * Thu Oct 14 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.1.rc1
 - cmake-3.22.0-rc1
   Fixes rhbz#2014190
+- Do not build non-lto objects to reduce build time significantly
 
 * Mon Sep 20 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.3-1
 - cmake-3.21.3
