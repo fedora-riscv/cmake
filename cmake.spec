@@ -58,9 +58,9 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 21
+%global minor_version 22
 # Set to RC version if building RC, else %%{nil}
-#global rcsuf rc1
+%global rcsuf rc1
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
@@ -72,8 +72,8 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.3
-Release:        %{baserelease}%{?relsuf}%{?dist}
+Version:        %{major_version}.%{minor_version}.0
+Release:        0.%{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -516,6 +516,10 @@ popd
 
 
 %changelog
+* Thu Oct 14 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.1.rc1
+- cmake-3.22.0-rc1
+  Fixes rhbz#2014190
+
 * Mon Sep 20 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.3-1
 - cmake-3.21.3
   Fixes rhbz#2006054
