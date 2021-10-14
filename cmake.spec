@@ -302,8 +302,10 @@ FCFLAGS="${FCFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FCFLAGS
 SRCDIR="$(/usr/bin/pwd)"
 mkdir %{_vpath_builddir}
 pushd %{_vpath_builddir}
-$SRCDIR/bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
-                  --docdir=/share/doc/%{name} --mandir=/share/man \
+$SRCDIR/bootstrap --prefix=%{_prefix} \
+                  --datadir=/share/%{name} \
+                  --docdir=/share/doc/%{name} \
+                  --mandir=/share/man \
                   --%{?with_bootstrap:no-}system-libs \
                   --parallel="$(echo %{?_smp_mflags} | sed -e 's|-j||g')" \
 %if %{with bundled_rhash}
@@ -318,9 +320,14 @@ $SRCDIR/bootstrap --prefix=%{_prefix} --datadir=/share/%{name} \
                   --sphinx-build=%{_bindir}/false \
 %endif
                   --%{!?with_gui:no-}qt-gui \
-;
+                  -- \
+                  -DCMAKE_C_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \
+                  -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \
+                  -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \
+                  -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+                  -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF
 popd
-%make_build -C %{_vpath_builddir} VERBOSE=1
+%make_build -C %{_vpath_builddir}
 
 
 %install
@@ -523,6 +530,7 @@ popd
 - cmake-3.22.0-rc1
   Fixes rhbz#2014190
 - Do not build non-lto objects to reduce build time significantly
+- Explicitly force optimization level 2 and debuginfo for release builds
 
 * Mon Sep 20 2021 Björn Esser <besser82@fedoraproject.org> - 3.21.3-1
 - cmake-3.21.3
