@@ -527,7 +527,7 @@ popd
 
 %changelog
 * Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.2.rc1
-- Revert previous changes to marcos.cmake (-O2 -g)
+- Revert previous changes to macros.cmake (-O2 -g)
   Fixes rhbz#2017942
 
 * Thu Oct 14 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.1.rc1
