@@ -29,9 +29,9 @@
   %__cmake \\\
         %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
         %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} \\\
-        -DCMAKE_C_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \\\
-        -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \\\
-        -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \\\
+        -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
+        -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
+        -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-g -DNDEBUG" \\\
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \\\
         -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF \\\
         -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \\\

@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -526,6 +526,10 @@ popd
 
 
 %changelog
+* Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.2.rc1
+- Revert previous changes to marcos.cmake (-O2 -g)
+  Fixes rhbz#2017942
+
 * Thu Oct 14 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.1.rc1
 - cmake-3.22.0-rc1
   Fixes rhbz#2014190
