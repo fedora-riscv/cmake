@@ -529,6 +529,8 @@ popd
 * Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.3.rc2
 - cmake-3.22.0-rc2
   Fixes rhbz#2018235
+- Remove debug compiler flag in macros.cmake (CMAKE_Fortran_FLAGS_RELEASE)
+  Fixes rhbz#2017942
 
 * Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.2.rc1
 - Revert previous changes to macros.cmake (-O2 -g)
