@@ -63,12 +63,12 @@
 %global major_version 3
 %global minor_version 22
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc1
+%global rcsuf rc2
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -526,6 +526,10 @@ popd
 
 
 %changelog
+* Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.3.rc2
+- cmake-3.22.0-rc2
+  Fixes rhbz#2018235
+
 * Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.2.rc1
 - Revert previous changes to macros.cmake (-O2 -g)
   Fixes rhbz#2017942
