@@ -8,7 +8,7 @@
 
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # Build with Emacs support
 %bcond_without emacs
@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -526,6 +526,9 @@ popd
 
 
 %changelog
+* Wed Nov 03 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.4.rc2
+- Rebuild (jsoncpp)
+
 * Thu Oct 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.3.rc2
 - cmake-3.22.0-rc2
   Fixes rhbz#2018235
