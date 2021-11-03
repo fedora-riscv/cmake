@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 4
+%global baserelease 5
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -526,6 +526,9 @@ popd
 
 
 %changelog
+* Wed Nov 03 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.5.rc2
+- Disable bootstrap build for jsoncpp
+
 * Wed Nov 03 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.4.rc2
 - Rebuild (jsoncpp)
 
