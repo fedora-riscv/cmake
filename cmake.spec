@@ -8,7 +8,7 @@
 
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # Build with Emacs support
 %bcond_without emacs
@@ -17,7 +17,7 @@
 %bcond_without git_test
 
 # Set to bcond_with or use --without gui to disable qt4 gui build
-%bcond_with gui
+%bcond_without gui
 
 # Use ncurses for colorful output
 %bcond_without ncurses
@@ -43,7 +43,7 @@
 %endif
 
 # Run tests
-%bcond_with test
+%bcond_without test
 
 # Enable X11 tests
 %bcond_without X11_test
