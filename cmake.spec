@@ -17,7 +17,7 @@
 %bcond_without git_test
 
 # Set to bcond_with or use --without gui to disable qt4 gui build
-%bcond_without gui
+%bcond_with gui
 
 # Use ncurses for colorful output
 %bcond_without ncurses
@@ -43,7 +43,7 @@
 %endif
 
 # Run tests
-%bcond_without test
+%bcond_with test
 
 # Enable X11 tests
 %bcond_without X11_test
