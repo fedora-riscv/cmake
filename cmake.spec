@@ -63,12 +63,12 @@
 %global major_version 3
 %global minor_version 22
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc2
+%global rcsuf rc3
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 5
+%global baserelease 6
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -526,6 +526,10 @@ popd
 
 
 %changelog
+* Fri Nov 12 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.6.rc3
+- cmake-3.22.0-rc3
+  Fixes rhbz#2022785
+
 * Wed Nov 03 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.5.rc2
 - Disable bootstrap build for jsoncpp
 
