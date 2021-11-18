@@ -63,12 +63,12 @@
 %global major_version 3
 %global minor_version 22
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc3
+#global rcsuf %%{nil}
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 6
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -76,7 +76,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{major_version}.%{minor_version}.0
-Release:        0.%{baserelease}%{?relsuf}%{?dist}
+Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -526,6 +526,9 @@ popd
 
 
 %changelog
+* Thu Nov 18 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.22.0-1
+- cmake-3.22.0 (#2024712)
+
 * Fri Nov 12 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-0.6.rc3
 - cmake-3.22.0-rc3
   Fixes rhbz#2022785
