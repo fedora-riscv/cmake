@@ -1,0 +1,29 @@
+From 2066bbfedc068a5adc21338d100216471e4aadc5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
+Date: Sun, 28 Nov 2021 21:03:37 +0100
+Subject: [PATCH] Fix rhbz#2027118.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Modules/GNUInstallDirs.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
+index 489c233197..b02d090436 100644
+--- a/Modules/GNUInstallDirs.cmake
++++ b/Modules/GNUInstallDirs.cmake
+@@ -281,7 +281,7 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR OR (_libdir_set
+           set(__LAST_LIBDIR_DEFAULT "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+         endif()
+       endif()
+-    elseif(NOT DEFINED __system_type_for_install)
++    else()
+       # not debian, alpine, arch, or conda so rely on CMAKE_SIZEOF_VOID_P:
+       if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+         set(_LIBDIR_DEFAULT "lib64")
+-- 
+2.33.1
+

@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -109,6 +109,8 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
+# rhbz#2027118
+Patch103:       %{name}-3.22.0-rhbz2027118.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -526,6 +528,10 @@ popd
 
 
 %changelog
+* Sun Nov 28 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-2
+- Add patch to partially revert incompatible changes in GNUInstallDirs.cmake
+  Fixes rhbz#2027118
+
 * Thu Nov 18 2021 Rex Dieter <rdieter@fedoraproject.org> - 3.22.0-1
 - cmake-3.22.0 (#2024712)
 
