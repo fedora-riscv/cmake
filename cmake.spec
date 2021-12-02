@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -112,6 +112,8 @@ Patch102:       %{name}-mingw-dl.patch
 # rhbz#2027118
 # https://gitlab.kitware.com/cmake/cmake/-/issues/22962
 Patch103:       https://gitlab.kitware.com/cmake/cmake/-/commit/7896991af029d66c9e1692ce18027fafaa0e9bd8.patch#/%{name}-3.22.0-rhbz2027118.patch
+# https://gitlab.kitware.com/cmake/cmake/-/issues/22963
+Patch104:       0001-Merge-topic-rpath-unrecognized-format-into-release-3.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -529,6 +531,9 @@ popd
 
 
 %changelog
+* Thu Dec 02 2021 Stephan Bergmann <sbergman@redhat.com> - 3.22.0-4
+- Fixes RPATH_CHANGE fails when shared object is a GNU ld script
+
 * Wed Dec 01 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.0-3
 - Update fix for rhbz#2027118 with upstream solution
 
