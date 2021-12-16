@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -112,6 +112,9 @@ Patch102:       %{name}-mingw-dl.patch
 # Add support for Python 3.11 (merged in upstream)
 # https://gitlab.kitware.com/cmake/cmake/-/merge_requests/6792
 Patch103:       0003-Add-support-for-Python-3.11.patch
+# Add support for Boost 1.78 (merged in upstream)
+# https://gitlab.kitware.com/cmake/cmake/-/issues/23016
+Patch104:       0004-FindBoost-Add-support-for-Boost-1.78.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -529,6 +532,9 @@ popd
 
 
 %changelog
+* Thu Dec 16 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-3
+- Backport patch to add Boost 1.78 support
+
 * Thu Dec 16 2021 Tomáš Hrnčiar <thrnciar@redhat.com> - 3.22.1-2
 - Backport patch to add Python 3.11 support
 
