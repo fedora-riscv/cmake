@@ -1,0 +1,53 @@
+From 376486c942ab4afc27150d938c1482c1d0000c42 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tom=C3=A1=C5=A1=20Hrn=C4=8Diar?= <thrnciar@redhat.com>
+Date: Tue, 7 Dec 2021 13:34:24 +0100
+Subject: [PATCH] Add support for Python 3.11
+
+---
+ Modules/FindPython/Support.cmake | 2 +-
+ Modules/FindPythonInterp.cmake   | 2 +-
+ Modules/FindPythonLibs.cmake     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Modules/FindPython/Support.cmake b/Modules/FindPython/Support.cmake
+index ce25cfc7..b7a0ef6b 100644
+--- a/Modules/FindPython/Support.cmake
++++ b/Modules/FindPython/Support.cmake
+@@ -22,7 +22,7 @@ if (NOT DEFINED _${_PYTHON_PREFIX}_REQUIRED_VERSION_MAJOR)
+   message (FATAL_ERROR "FindPython: INTERNAL ERROR")
+ endif()
+ if (_${_PYTHON_PREFIX}_REQUIRED_VERSION_MAJOR EQUAL "3")
+-  set(_${_PYTHON_PREFIX}_VERSIONS 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
++  set(_${_PYTHON_PREFIX}_VERSIONS 3.11 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
+ elseif (_${_PYTHON_PREFIX}_REQUIRED_VERSION_MAJOR EQUAL "2")
+   set(_${_PYTHON_PREFIX}_VERSIONS 2.7 2.6 2.5 2.4 2.3 2.2 2.1 2.0)
+ else()
+diff --git a/Modules/FindPythonInterp.cmake b/Modules/FindPythonInterp.cmake
+index efe0f119..4fc40c89 100644
+--- a/Modules/FindPythonInterp.cmake
++++ b/Modules/FindPythonInterp.cmake
+@@ -54,7 +54,7 @@ unset(_Python_NAMES)
+ 
+ set(_PYTHON1_VERSIONS 1.6 1.5)
+ set(_PYTHON2_VERSIONS 2.7 2.6 2.5 2.4 2.3 2.2 2.1 2.0)
+-set(_PYTHON3_VERSIONS 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
++set(_PYTHON3_VERSIONS 3.11 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
+ 
+ if(PythonInterp_FIND_VERSION)
+     if(PythonInterp_FIND_VERSION_COUNT GREATER 1)
+diff --git a/Modules/FindPythonLibs.cmake b/Modules/FindPythonLibs.cmake
+index 396f0d2e..c0caf347 100644
+--- a/Modules/FindPythonLibs.cmake
++++ b/Modules/FindPythonLibs.cmake
+@@ -79,7 +79,7 @@ set(CMAKE_FIND_FRAMEWORK LAST)
+ 
+ set(_PYTHON1_VERSIONS 1.6 1.5)
+ set(_PYTHON2_VERSIONS 2.7 2.6 2.5 2.4 2.3 2.2 2.1 2.0)
+-set(_PYTHON3_VERSIONS 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
++set(_PYTHON3_VERSIONS 3.11 3.10 3.9 3.8 3.7 3.6 3.5 3.4 3.3 3.2 3.1 3.0)
+ 
+ if(PythonLibs_FIND_VERSION)
+     if(PythonLibs_FIND_VERSION_COUNT GREATER 1)
+-- 
+2.33.1
+

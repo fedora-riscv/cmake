@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -109,6 +109,9 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
+# Add support for Python 3.11 (merged in upstream)
+# https://gitlab.kitware.com/cmake/cmake/-/merge_requests/6792
+Patch103:       0003-Add-support-for-Python-3.11.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -526,6 +529,9 @@ popd
 
 
 %changelog
+* Thu Dec 16 2021 Tomáš Hrnčiar <thrnciar@redhat.com> - 3.22.1-2
+- Backport patch to add Python 3.11 support
+
 * Tue Dec 07 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-1
 - cmake-3.22.1
   Fixes rhbz#2029974
