@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 4
+%global baserelease 5
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -118,6 +118,12 @@ Patch104:       0004-FindBoost-Add-support-for-Boost-1.78.patch
 # FindBoost: Add support for Python >= 3.10 (merged in upstream)
 # https://gitlab.kitware.com/cmake/cmake/-/issues/23025
 Patch105:       0005-FindBoost-Add-support-for-Python-3.10.patch
+# FindBoost: Do not warn about now-supported version 1.78 (merged in upstream)
+# https://gitlab.kitware.com/cmake/cmake/-/issues/23016
+Patch106:       0006-FindBoost-Do-not-warn-about-now-supported-version-1..patch
+# FindGLUT: Provide legacy GLUT_INCLUDE_DIR result in pkg-config code path (merged in upstream)
+# https://gitlab.kitware.com/cmake/cmake/-/issues/23018
+Patch107:       0007-FindGLUT-Provide-legacy-GLUT_INCLUDE_DIR-result-in-p.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -535,6 +541,9 @@ popd
 
 
 %changelog
+* Sun Dec 26 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-5
+- Backport two patches fixing regressions in FindBoost and FindGLUT
+
 * Fri Dec 17 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-4
 - Backport patch to add support for Python >= 3.10 in FindBoost.cmake
 

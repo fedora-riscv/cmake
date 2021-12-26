@@ -1,0 +1,54 @@
+From ae6b25d920325585f0e7f56d23d2b0f8e0b39af8 Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Fri, 17 Dec 2021 12:59:51 -0500
+Subject: [PATCH 7/9] FindGLUT: Provide legacy GLUT_INCLUDE_DIR result in
+ pkg-config code path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since commit f90d15458a (FindGLUT: Use pkg-config to find flags if
+available, 2021-06-11, v3.22.0-rc1~469^2) we return early if pkg-config
+provides the information.  During review of that commit, code to
+populate the legacy `GLUT_INCLUDE_DIR` result variable was removed from
+that code path.  Add code to provide it.
+
+Also fix the test case to use `GLUT_INCLUDE_DIR`, the result variable
+documented officially by the module.
+
+Fixes: #23018
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Modules/FindGLUT.cmake             | 2 ++
+ Tests/FindGLUT/Test/CMakeLists.txt | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Modules/FindGLUT.cmake b/Modules/FindGLUT.cmake
+index dd0975d395..636f1ea3b1 100644
+--- a/Modules/FindGLUT.cmake
++++ b/Modules/FindGLUT.cmake
+@@ -71,6 +71,8 @@ find_package(PkgConfig)
+ if(PKG_CONFIG_FOUND)
+   pkg_check_modules(GLUT glut)
+   if(GLUT_FOUND)
++    # In the non-pkg-config code path we only provide GLUT_INCLUDE_DIR.
++    set(GLUT_INCLUDE_DIR "${GLUT_INCLUDE_DIRS}")
+     _add_glut_target_simple()
+     FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLUT REQUIRED_VARS GLUT_FOUND)
+     return()
+diff --git a/Tests/FindGLUT/Test/CMakeLists.txt b/Tests/FindGLUT/Test/CMakeLists.txt
+index 0f4e536739..f6440b250f 100644
+--- a/Tests/FindGLUT/Test/CMakeLists.txt
++++ b/Tests/FindGLUT/Test/CMakeLists.txt
+@@ -9,7 +9,7 @@ target_link_libraries(testglut_tgt GLUT::GLUT)
+ add_test(NAME testglut_tgt COMMAND testglut_tgt)
+ 
+ add_executable(testglut_var main.c)
+-target_include_directories(testglut_var PRIVATE ${GLUT_INCLUDE_DIRS})
++target_include_directories(testglut_var PRIVATE ${GLUT_INCLUDE_DIR})
+ target_link_libraries(testglut_var PRIVATE ${GLUT_LIBRARIES})
+ add_test(NAME testglut_var COMMAND testglut_var)
+ 
+-- 
+2.33.1
+
