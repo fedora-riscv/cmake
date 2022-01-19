@@ -465,6 +465,9 @@ pushd %{_vpath_builddir}
 # CTestTestUpload require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
 NO_TEST="CTestTestUpload"
+# Likely failing for GCC 12
+NO_TEST="$NO_TEST|CustomCommand|CMakeLib.testCTestResourceAllocator"
+NO_TEST="$NO_TEST|CMakeLib.testCTestResourceSpec|RunCMake.PositionIndependentCode"
 # kwsys.testProcess-{4,5} are flaky on s390x.
 %ifarch s390x
 NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
@@ -548,6 +551,7 @@ popd
 * Wed Jan 19 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.1-6
 - Add patch to fix compatibility of FortranCInterface with GCC gfortran 12 LTO
   Fixes rhbz#2041904
+- Skip tests failing with GCC 12
 
 * Sun Dec 26 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-5
 - Backport two patches fixing regressions in FindBoost and FindGLUT
