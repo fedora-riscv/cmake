@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 5
+%global baserelease 6
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -124,6 +124,10 @@ Patch106:       0006-FindBoost-Do-not-warn-about-now-supported-version-1..patch
 # FindGLUT: Provide legacy GLUT_INCLUDE_DIR result in pkg-config code path (merged in upstream)
 # https://gitlab.kitware.com/cmake/cmake/-/issues/23018
 Patch107:       0007-FindGLUT-Provide-legacy-GLUT_INCLUDE_DIR-result-in-p.patch
+# FortranCInterface: Fix compatibility with GCC gfortran 12 LTO (proposed PR upstream)
+# https://bugzilla.redhat.com/show_bug.cgi?id=2041904
+# https://gitlab.kitware.com/cmake/cmake/-/issues/23123
+Patch108:       0008-FortranCInterface-Fix-compatibility-with-GCC-gfortra.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -541,6 +545,10 @@ popd
 
 
 %changelog
+* Wed Jan 19 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.1-6
+- Add patch to fix compatibility of FortranCInterface with GCC gfortran 12 LTO
+  Fixes rhbz#2041904
+
 * Sun Dec 26 2021 Björn Esser <besser82@fedoraproject.org> - 3.22.1-5
 - Backport two patches fixing regressions in FindBoost and FindGLUT
 
