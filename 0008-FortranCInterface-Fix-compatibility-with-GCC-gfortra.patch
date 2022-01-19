@@ -1,4 +1,4 @@
-From 537d964fab8b3f524eb3622c53f22279ea14fd62 Mon Sep 17 00:00:00 2001
+From 6a0ce19ce1cb594cdec19bacc9fc7a38156e38da Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
 Date: Wed, 19 Jan 2022 17:26:14 +0100
 Subject: [PATCH] FortranCInterface: Fix compatibility with GCC gfortran 12 LTO
@@ -15,33 +15,41 @@ naming of subroutines to fail.  Thus we must ensure to have any link-time
 optimization features to be disabled on the executable file we perform the
 detection on.
 
+The static libraries, however, must be build with LTO and non-LTO objects,
+as that will ensure the verify step will operate on IPO objects, if building
+those is requested by the system compiler flags.
+
 Fixes: #23123
 
 Signed-off-by: Björn Esser <besser82@fedoraproject.org>
 ---
- Modules/FortranCInterface/CMakeLists.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ Modules/FortranCInterface/CMakeLists.txt | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/Modules/FortranCInterface/CMakeLists.txt b/Modules/FortranCInterface/CMakeLists.txt
-index 13e4498ad9..f21b92fc54 100644
+index 13e4498ad9..ce0bc10c8e 100644
 --- a/Modules/FortranCInterface/CMakeLists.txt
 +++ b/Modules/FortranCInterface/CMakeLists.txt
-@@ -5,6 +5,15 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
- project(FortranCInterface C Fortran)
- include(${FortranCInterface_BINARY_DIR}/Input.cmake OPTIONAL)
+@@ -102,6 +102,19 @@ set_property(TARGET symbols PROPERTY POSITION_INDEPENDENT_CODE 1)
+ add_executable(FortranCInterface main.F call_sub.f ${call_mod})
+ target_link_libraries(FortranCInterface PUBLIC symbols)
  
 +# If IPO is enabled here, GCC gfortran >= 12.0 will obfuscate
 +# the strings of the return values in the compiled executable,
 +# which we use to regex match against later.
++# The static libraries must be build with IPO and non-IPO objects,
++# as that will ensure the verify step will operate on IPO objects,
++# if requested by the system compiler flags.
 +if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" AND
 +  CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 12)
-+  string(APPEND CMAKE_C_FLAGS " -fno-lto")
-+  string(APPEND CMAKE_Fortran_FLAGS " -fno-lto")
++  target_compile_options(FortranCInterface PRIVATE "-fno-lto")
++  target_compile_options(myfort PRIVATE "-flto=auto" "-ffat-lto-objects")
++  target_compile_options(symbols PRIVATE "-flto=auto" "-ffat-lto-objects")
 +endif()
 +
- # Check if the C compiler supports '$' in identifiers.
- include(CheckCSourceCompiles)
- check_c_source_compiles("
+ file(GENERATE OUTPUT exe-$<CONFIG>.cmake CONTENT [[
+ set(FortranCInterface_EXE "$<TARGET_FILE:FortranCInterface>")
+ ]])
 -- 
 2.34.1
 
