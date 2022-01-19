@@ -1,4 +1,4 @@
-From 5ec4aa48f7fb0a6ab4b1385e5512527ecb24f588 Mon Sep 17 00:00:00 2001
+From 537d964fab8b3f524eb3622c53f22279ea14fd62 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
 Date: Wed, 19 Jan 2022 17:26:14 +0100
 Subject: [PATCH] FortranCInterface: Fix compatibility with GCC gfortran 12 LTO
@@ -19,14 +19,14 @@ Fixes: #23123
 
 Signed-off-by: Björn Esser <besser82@fedoraproject.org>
 ---
- Modules/FortranCInterface/CMakeLists.txt | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ Modules/FortranCInterface/CMakeLists.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/Modules/FortranCInterface/CMakeLists.txt b/Modules/FortranCInterface/CMakeLists.txt
-index 13e4498ad9..6bbb753042 100644
+index 13e4498ad9..f21b92fc54 100644
 --- a/Modules/FortranCInterface/CMakeLists.txt
 +++ b/Modules/FortranCInterface/CMakeLists.txt
-@@ -5,6 +5,17 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
+@@ -5,6 +5,15 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION})
  project(FortranCInterface C Fortran)
  include(${FortranCInterface_BINARY_DIR}/Input.cmake OPTIONAL)
  
@@ -35,10 +35,8 @@ index 13e4498ad9..6bbb753042 100644
 +# which we use to regex match against later.
 +if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU" AND
 +  CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 12)
-+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-lto")
-+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-lto")
-+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-lto")
-+  set(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE} -fno-lto")
++  string(APPEND CMAKE_C_FLAGS " -fno-lto")
++  string(APPEND CMAKE_Fortran_FLAGS " -fno-lto")
 +endif()
 +
  # Check if the C compiler supports '$' in identifiers.
