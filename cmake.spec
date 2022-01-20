@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 6
+%global baserelease 7
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -548,6 +548,9 @@ popd
 
 
 %changelog
+* Thu Jan 20 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Wed Jan 19 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.1-6
 - Add patch to fix compatibility of FortranCInterface with GCC gfortran 12 LTO
   Fixes rhbz#2041904
