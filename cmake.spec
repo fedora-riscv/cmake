@@ -68,14 +68,14 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 7
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.1
+Version:        %{major_version}.%{minor_version}.2
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -109,25 +109,6 @@ Patch101:       %{name}-fedora-flag_release.patch
 # Add dl to CMAKE_DL_LIBS on MINGW
 # https://gitlab.kitware.com/cmake/cmake/issues/17600
 Patch102:       %{name}-mingw-dl.patch
-# Add support for Python 3.11 (merged in upstream)
-# https://gitlab.kitware.com/cmake/cmake/-/merge_requests/6792
-Patch103:       0003-Add-support-for-Python-3.11.patch
-# Add support for Boost 1.78 (merged in upstream)
-# https://gitlab.kitware.com/cmake/cmake/-/issues/23016
-Patch104:       0004-FindBoost-Add-support-for-Boost-1.78.patch
-# FindBoost: Add support for Python >= 3.10 (merged in upstream)
-# https://gitlab.kitware.com/cmake/cmake/-/issues/23025
-Patch105:       0005-FindBoost-Add-support-for-Python-3.10.patch
-# FindBoost: Do not warn about now-supported version 1.78 (merged in upstream)
-# https://gitlab.kitware.com/cmake/cmake/-/issues/23016
-Patch106:       0006-FindBoost-Do-not-warn-about-now-supported-version-1..patch
-# FindGLUT: Provide legacy GLUT_INCLUDE_DIR result in pkg-config code path (merged in upstream)
-# https://gitlab.kitware.com/cmake/cmake/-/issues/23018
-Patch107:       0007-FindGLUT-Provide-legacy-GLUT_INCLUDE_DIR-result-in-p.patch
-# FortranCInterface: Fix compatibility with GCC gfortran 12 LTO (proposed PR upstream)
-# https://bugzilla.redhat.com/show_bug.cgi?id=2041904
-# https://gitlab.kitware.com/cmake/cmake/-/issues/23123
-Patch108:       0008-FortranCInterface-Fix-compatibility-with-GCC-gfortra.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -548,6 +529,10 @@ popd
 
 
 %changelog
+* Tue Jan 25 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.2-1
+- cmake-3.22.2
+  Fixes rhbz#2045074
+
 * Thu Jan 20 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
