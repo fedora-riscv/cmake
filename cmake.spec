@@ -443,9 +443,9 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 %if %{with test}
 %check
 pushd %{_vpath_builddir}
-# CTestTestUpload require internet access
+# CTestTestUpload and BundleUtilities require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload"
+NO_TEST="CTestTestUpload|BundleUtilities"
 # Likely failing for GCC 12
 NO_TEST="$NO_TEST|CustomCommand|CMakeLib.testCTestResourceAllocator"
 NO_TEST="$NO_TEST|CMakeLib.testCTestResourceSpec|RunCMake.PositionIndependentCode"
