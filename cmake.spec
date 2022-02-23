@@ -61,21 +61,21 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 22
+%global minor_version 23
 # Set to RC version if building RC, else %%{nil}
-#global rcsuf %%{nil}
+%global rcsuf rc2
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 0.1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.2
+Version:        %{major_version}.%{minor_version}.0
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -529,6 +529,10 @@ popd
 
 
 %changelog
+* Wed Feb 23 2022 Björn Esser <besser82@fedoraproject.org> - 3.23.0-0.1.rc2
+- cmake-3.23.0-rc2
+  Fixes rhbz#2052100
+
 * Tue Jan 25 2022 Björn Esser <besser82@fedoraproject.org> - 3.22.2-1
 - cmake-3.22.2
   Fixes rhbz#2045074
