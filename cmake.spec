@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 0.1
+%global baserelease 0.2
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -529,6 +529,9 @@ popd
 
 
 %changelog
+* Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 3.23.0-0.2.rc2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Wed Feb 23 2022 Björn Esser <besser82@fedoraproject.org> - 3.23.0-0.1.rc2
 - cmake-3.23.0-rc2
   Fixes rhbz#2052100
