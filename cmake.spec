@@ -63,19 +63,19 @@
 %global major_version 3
 %global minor_version 23
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc2
+#global rcsuf %%{nil}
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 0.2
+%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.0
+Version:        %{major_version}.%{minor_version}.3
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -529,6 +529,9 @@ popd
 
 
 %changelog
+* Fri Jul 29 2022 Leigh Scott <leigh123linux@gmail.com> - 3.23.3-1
+- cmake-3.23.3
+
 * Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 3.23.0-0.2.rc2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
