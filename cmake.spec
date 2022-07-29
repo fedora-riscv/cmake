@@ -678,16 +678,16 @@ popd
 * Tue Dec 15 2020 Tom Stellard <tstellar@redhat.com> - 3.18.4-4
 - Update BuildRequires for eln
 
-* Fri Nov 20 08:32:34 EST 2020 Neal Gompa <ngompa13@gmail.com> - 3.18.4-3
+* Fri Nov 20 2020 Neal Gompa <ngompa13@gmail.com> - 3.18.4-3
 - Ensure CMake does not strip binaries with package builds
 
 * Mon Nov 09 2020 Miro Hrončok <mhroncok@redhat.com> - 3.18.4-2
 - Add support for Python 3.10
 
-* Tue Oct 13 10:03:16 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.4-1
+* Tue Oct 13 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.4-1
 - Update to 3.18.4
 
-* Wed Sep 30 12:49:57 CEST 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.3-1
+* Wed Sep 30 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.3-1
 - Update to 3.18.3
 - Explicitly require make
 - Add patch to support FlexiBLAS
