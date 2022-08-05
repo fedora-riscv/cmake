@@ -61,7 +61,7 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 23
+%global minor_version 24
 # Set to RC version if building RC, else %%{nil}
 #global rcsuf %%{nil}
 %{?rcsuf:%global relsuf .%{rcsuf}}
@@ -75,7 +75,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.3
+Version:        %{major_version}.%{minor_version}.0
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -529,6 +529,9 @@ popd
 
 
 %changelog
+* Fri Aug 05 2022 Leigh Scott <leigh123linux@gmail.com> - 3.24.0-1
+- cmake-3.24.0
+
 * Fri Jul 29 2022 Leigh Scott <leigh123linux@gmail.com> - 3.23.3-1
 - cmake-3.23.3
 
