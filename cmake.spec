@@ -75,7 +75,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        %{major_version}.%{minor_version}.0
+Version:        %{major_version}.%{minor_version}.1
 Release:        %{baserelease}%{?relsuf}%{?dist}
 Summary:        Cross-platform make system
 
@@ -529,6 +529,9 @@ popd
 
 
 %changelog
+* Thu Aug 18 2022 Björn Esser <besser82@fedoraproject.org> - 3.24.1-1
+- cmake-3.24.1
+
 * Fri Aug 05 2022 Leigh Scott <leigh123linux@gmail.com> - 3.24.0-1
 - cmake-3.24.0
 
