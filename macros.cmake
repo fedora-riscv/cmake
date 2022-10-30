@@ -50,7 +50,7 @@
 %cmake_install \
   DESTDIR="%{buildroot}" %__cmake --install "%{__cmake_builddir}"
 
-%ctest(:-:) \
+%ctest(:-:h:j:u:v:A:C:D:E:F:H:I:L:M:N:O:Q:R:S:T:U:V:) \
   cd "%{__cmake_builddir}" \
   %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**} \
   cd -
@@ -59,4 +59,5 @@
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
 %cmake@@CMAKE_MAJOR_VERSION@@_build %cmake_build
 %cmake@@CMAKE_MAJOR_VERSION@@_install %cmake_install
-%ctest@@CMAKE_MAJOR_VERSION@@(:-:) %ctest %{**}
+%ctest@@CMAKE_MAJOR_VERSION@@(:-:h:j:u:v:A:C:D:E:F:H:I:L:M:N:O:Q:R:S:T:U:V:) \
+  %ctest %{**}
