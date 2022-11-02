@@ -449,10 +449,6 @@ pushd %{_vpath_builddir}
 NO_TEST="CTestTestUpload"
 # Likely failing for hardening flags from system.
 NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
-# kwsys.testProcess-{4,5} are flaky on s390x.
-%ifarch s390x
-NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
-%endif
 # curl test may fail during bootstrap
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
@@ -533,6 +529,7 @@ popd
 - Re-enable BundleUtilities, CMakeLib.testCTestResourceAllocator,
   CMakeLib.testCTestResourceSpec, CTest.UpdateGIT, ExternalProject
   during testsuite run
+- Re-enable kwsys.testProcess-{4,5} on s390x
 
 * Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.4.rc3
 - cmake-3.25.0-rc3
