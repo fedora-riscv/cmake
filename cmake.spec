@@ -445,12 +445,10 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 %if %{with test}
 %check
 pushd %{_vpath_builddir}
-# CTestTestUpload and BundleUtilities require internet access
-# CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload|BundleUtilities"
-# Likely failing for GCC 12
-NO_TEST="$NO_TEST|CustomCommand|CMakeLib.testCTestResourceAllocator"
-NO_TEST="$NO_TEST|CMakeLib.testCTestResourceSpec|RunCMake.PositionIndependentCode"
+# CTestTestUpload requires internet access.
+NO_TEST="CTestTestUpload"
+# Likely failing for hardening flags from system.
+NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
 # kwsys.testProcess-{4,5} are flaky on s390x.
 %ifarch s390x
 NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
@@ -460,7 +458,7 @@ NO_TEST="$NO_TEST|kwsys.testProcess-4|kwsys.testProcess-5"
 NO_TEST="$NO_TEST|curl"
 %endif
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
-## do this only periodically, not for every build -- rdieter 20210429
+## do this only periodically, not for every build -- besser82 20221102
 # Keep an eye on failing tests
 #bin/ctest%{?name_suffix} %{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
 popd
@@ -532,7 +530,9 @@ popd
 
 %changelog
 * Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.5.rc3
-- Re-enable ExternalProject and CTest.UpdateGIT on testsuite run
+- Re-enable BundleUtilities, CMakeLib.testCTestResourceAllocator,
+  CMakeLib.testCTestResourceSpec, CTest.UpdateGIT, ExternalProject
+  during testsuite run
 
 * Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.4.rc3
 - cmake-3.25.0-rc3
