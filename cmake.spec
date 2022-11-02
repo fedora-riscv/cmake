@@ -68,7 +68,7 @@
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 0.4
+%global baserelease 0.5
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -445,9 +445,9 @@ find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
 %if %{with test}
 %check
 pushd %{_vpath_builddir}
-# CTestTestUpload, BundleUtilities, ExternalProject, and CTest.UpdateGIT require internet access
+# CTestTestUpload and BundleUtilities require internet access
 # CPackComponentsForAll-RPM-IgnoreGroup failing wih rpm 4.15 - https://gitlab.kitware.com/cmake/cmake/issues/19983
-NO_TEST="CTestTestUpload|BundleUtilities|ExternalProject|CTest.UpdateGIT"
+NO_TEST="CTestTestUpload|BundleUtilities"
 # Likely failing for GCC 12
 NO_TEST="$NO_TEST|CustomCommand|CMakeLib.testCTestResourceAllocator"
 NO_TEST="$NO_TEST|CMakeLib.testCTestResourceSpec|RunCMake.PositionIndependentCode"
@@ -531,6 +531,9 @@ popd
 
 
 %changelog
+* Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.5.rc3
+- Re-enable ExternalProject and CTest.UpdateGIT on testsuite run
+
 * Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.4.rc3
 - cmake-3.25.0-rc3
   Fixes rhbz#2062783
