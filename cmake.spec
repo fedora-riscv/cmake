@@ -63,12 +63,12 @@
 %global major_version 3
 %global minor_version 25
 # Set to RC version if building RC, else %%{nil}
-%global rcsuf rc2
+%global rcsuf rc3
 %{?rcsuf:%global relsuf .%{rcsuf}}
 %{?rcsuf:%global versuf -%{rcsuf}}
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 0.3
+%global baserelease 0.4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -531,6 +531,10 @@ popd
 
 
 %changelog
+* Wed Nov 02 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.4.rc3
+- cmake-3.25.0-rc3
+  Fixes rhbz#2062783
+
 * Sun Oct 30 2022 Björn Esser <besser82@fedoraproject.org> - 3.25.0-0.3.rc2
 - Allow valid short arguments for %%ctest macro
   Fixes rhbz#2127650
