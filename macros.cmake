@@ -51,9 +51,7 @@
   DESTDIR="%{buildroot}" %__cmake --install "%{__cmake_builddir}"
 
 %ctest(:-:h:j:u:v:A:C:D:E:F:H:I:L:M:N:O:Q:R:S:T:U:V:) \
-  cd "%{__cmake_builddir}" \
-  %__ctest --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**} \
-  cd -
+  %__ctest --test-dir "%{__cmake_builddir}" --output-on-failure --force-new-ctest-process %{?_smp_mflags} %{**}
 
 
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
