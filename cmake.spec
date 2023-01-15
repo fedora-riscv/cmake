@@ -114,7 +114,7 @@ Patch102:       %{name}-mingw-dl.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
-Patch1:      %{name}-rename.patch
+Patch1:         %{name}-rename.patch
 %endif
 
 BuildRequires:  coreutils
