@@ -91,7 +91,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{pkg_version}
-Release:        %{baserelease}%{?dist}
+Release:        %{baserelease}.rv64%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -549,6 +549,9 @@ popd
 
 
 %changelog
+* Mon May 06 2024 Liu Yang <Yang.Liu.sn@gmail.com> - 3.28.2-1.rv64
+- Fix build on riscv64.
+
 * Thu Feb 01 2024 Frantisek Zatloukal <fzatlouk@redhat.com> - 3.28.2-1
 - cmake-3.28.2 (fixes RHBZ#2261037 and RHBZ#2243343)
 
