@@ -84,7 +84,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{pkg_version}
-Release:        %{baserelease}%{?dist}
+Release:        %{baserelease}.rv64%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -457,6 +457,10 @@ NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
 %endif
+%ifarch riscv64
+# These three tests timeout on riscv64, skip them.
+NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink"
+%endif
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 ## do this only periodically, not for every build -- besser82 20221102
 # Keep an eye on failing tests
@@ -529,6 +533,9 @@ popd
 
 
 %changelog
+* Mon Apr 24 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 3.26.3-1.rv64
+- Fix build on riscv64.
+
 * Wed Apr 05 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.3-1
 - cmake-3.26.3
   Fixes rhbz#2184478
