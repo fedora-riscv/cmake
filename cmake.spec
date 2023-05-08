@@ -76,7 +76,7 @@
 %endif
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -535,6 +535,9 @@ popd
 
 
 %changelog
+* Mon May 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.3-3
+- Build cmake-gui with Qt6
+
 * Fri May 05 2023 Nianqing Yao <imbearchild@outlook.com> - 3.26.3-2
 - Fix build on riscv64
 
