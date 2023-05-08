@@ -16,7 +16,7 @@
 # Run git tests
 %bcond_without git_test
 
-# Set to bcond_with or use --without gui to disable qt4 gui build
+# Set to bcond_with or use --without gui to disable qt gui build
 %bcond_without gui
 
 # Use ncurses for colorful output
@@ -178,7 +178,9 @@ BuildRequires:  python2-devel
 %endif
 %endif
 %if %{with gui}
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 9
+BuildRequires: pkgconfig(Qt6Widgets)
+%elif 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5Widgets)
 %else
 BuildRequires: pkgconfig(QtGui)
