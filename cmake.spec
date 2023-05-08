@@ -536,7 +536,7 @@ popd
 
 %changelog
 * Fri May 05 2023 Nianqing Yao <imbearchild@outlook.com> - 3.26.3-2
-- Fix build on riscv64.
+- Fix build on riscv64
 
 * Wed Apr 05 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.3-1
 - cmake-3.26.3
