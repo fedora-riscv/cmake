@@ -20,11 +20,11 @@
 %if 0%{?set_build_flags:1} \
   %set_build_flags \
 %else \
-  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
-  CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
-  FFLAGS="${FFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FFLAGS ; \
-  FCFLAGS="${FCFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FCFLAGS ; \
-  %{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;} \
+  CFLAGS="${CFLAGS:-%build_cflags}" ; export CFLAGS ; \
+  CXXFLAGS="${CXXFLAGS:-%build_cxxflags}" ; export CXXFLAGS ; \
+  FFLAGS="${FFLAGS:-%build_fflags}" ; export FFLAGS ; \
+  FCFLAGS="${FCFLAGS:-%build_fflags}" ; export FCFLAGS ; \
+  %{?build_ldflags:LDFLAGS="${LDFLAGS:-%build_ldflags}" ; export LDFLAGS ;} \
 %endif \
   %__cmake \\\
         %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
