@@ -541,7 +541,7 @@ popd
 - macros: Directly use %%set_build_flags, as it is supported since EPEL 7
 
 * Fri May 19 2023 Neal Gompa <ngompa@fedoraproject.org> - 3.26.4-2
-- macros: use the language build flag macros for compiler flags
+- macros: Use the language build flag macros for compiler flags
 
 * Fri May 19 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-1
 - cmake-3.26.4
