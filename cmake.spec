@@ -76,7 +76,7 @@
 %endif
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -96,7 +96,7 @@ License:        BSD and MIT and zlib
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v%{major_version}.%{minor_version}/%{orig_name}-%{tar_version}.tar.gz
 Source1:        %{name}-init.el
-Source2:        macros.%{name}
+Source2:        macros.%{name}.in
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1202899
 Source3:        %{name}.attr
 Source4:        %{name}.prov
@@ -535,6 +535,9 @@ popd
 
 
 %changelog
+* Sat May 27 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-3
+- Rename macros.cmake -> macros.cmake.in
+
 * Fri May 19 2023 Neal Gompa <ngompa@fedoraproject.org> - 3.26.4-2
 - macros: use the language build flag macros for compiler flags
 
