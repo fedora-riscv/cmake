@@ -455,6 +455,10 @@ pushd %{_vpath_builddir}
 NO_TEST="CTestTestUpload"
 # Likely failing for hardening flags from system.
 NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
+# Failing for rpm 4.19
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-default"
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-OnePackPerGroup"
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-AllInOne"
 # curl test may fail during bootstrap
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
@@ -539,6 +543,7 @@ popd
 - Rename macros.cmake -> macros.cmake.in
 - macros: Fix formatting and indentation
 - macros: Directly use %%set_build_flags, as it is supported since EPEL 7
+- Exclude tests that are failing for rpm 4.19
 
 * Fri May 19 2023 Neal Gompa <ngompa@fedoraproject.org> - 3.26.4-2
 - macros: Use the language build flag macros for compiler flags
