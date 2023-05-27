@@ -9,9 +9,10 @@
 %__ctest /usr/bin/ctest
 %__cmake_builddir %{!?__cmake_in_source_build:%{_vpath_builddir}}%{?__cmake_in_source_build:.}
 
+
 # - Set default compile flags
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
-# and default to -O3 -DNDEBUG.  Strip the -O3 so we can override with *FLAGS
+#   and default to -O3 -DNDEBUG.  Strip the -O3 so we can override with *FLAGS
 # - Turn on verbose makefiles so we can see and verify compile flags
 # - Turn off stripping by default so RPM can do it separately
 # - Set default install prefixes and library install directories

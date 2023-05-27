@@ -537,6 +537,7 @@ popd
 %changelog
 * Sat May 27 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-3
 - Rename macros.cmake -> macros.cmake.in
+- macros: Fix formatting and indentation
 
 * Fri May 19 2023 Neal Gompa <ngompa@fedoraproject.org> - 3.26.4-2
 - macros: use the language build flag macros for compiler flags
