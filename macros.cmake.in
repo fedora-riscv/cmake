@@ -18,15 +18,7 @@
 # - Set default install prefixes and library install directories
 # - Turn on shared libraries by default
 %cmake \
-%if 0%{?set_build_flags:1} \
-  %set_build_flags \
-%else \
-  CFLAGS="${CFLAGS:-%build_cflags}" ; export CFLAGS ; \
-  CXXFLAGS="${CXXFLAGS:-%build_cxxflags}" ; export CXXFLAGS ; \
-  FFLAGS="${FFLAGS:-%build_fflags}" ; export FFLAGS ; \
-  FCFLAGS="${FCFLAGS:-%build_fflags}" ; export FCFLAGS ; \
-  %{?build_ldflags:LDFLAGS="${LDFLAGS:-%build_ldflags}" ; export LDFLAGS ;} \
-%endif \
+  %{set_build_flags} \
   %__cmake \\\
         %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
         %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} \\\
