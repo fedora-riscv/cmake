@@ -61,11 +61,14 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 26
-%global patch_version 4
+%global minor_version 27
+%global patch_version 0
+
+# For handling bump release by rpmdev-bumpspec and mass rebuild
+%global baserelease 1
 
 # Set to RC version if building RC, else comment out.
-#global rcsuf rc1
+%global rcsuf rc1
 
 %if 0%{?rcsuf:1}
 %global pkg_version %{major_version}.%{minor_version}.%{patch_version}~%{rcsuf}
@@ -74,9 +77,6 @@
 %global pkg_version %{major_version}.%{minor_version}.%{patch_version}
 %global tar_version %{major_version}.%{minor_version}.%{patch_version}
 %endif
-
-# For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 4
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -110,23 +110,11 @@ Source5:        %{name}.req
 # http://public.kitware.com/Bug/view.php?id=12965
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch100:       %{name}-findruby.patch
-# Add dl to CMAKE_DL_LIBS on MINGW
-# https://gitlab.kitware.com/cmake/cmake/issues/17600
-%if 0%{?fedora} && 0%{?fedora} < 38
-Patch102:       %{name}-mingw-dl.patch
-%endif
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
 Patch1:         %{name}-rename.patch
 %endif
-
-# Backported from upstream.
-Patch10001:     0001-Sphinx-Specify-encoding-when-opening-files-for-title.patch
-Patch10002:     0002-Sphinx-Modernize-UTF-8-encoding-handling-when-updati.patch
-Patch10003:     0003-Tests-Always-load-presets-schema-as-UTF-8.patch
-Patch10004:     0004-CMakeDetermineCompilerABI-Avoid-removing-the-flag-af.patch
-Patch10005:     0005-FindBoost-Add-support-for-Boost-1.82.patch
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -305,15 +293,7 @@ tail -n +2 %{SOURCE5} >> %{name}.req
 
 
 %build
-%if 0%{?set_build_flags:1}
 %{set_build_flags}
-%else
-CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS
-CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS
-FFLAGS="${FFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FFLAGS
-FCFLAGS="${FCFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FCFLAGS
-%{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;}
-%endif
 SRCDIR="$(/usr/bin/pwd)"
 mkdir %{_vpath_builddir}
 pushd %{_vpath_builddir}
@@ -546,6 +526,9 @@ popd
 
 
 %changelog
+* Thu Jun 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc1-1
+- cmake-3.27.0-rc1
+
 * Thu Jun 01 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-4
 - Backport several bugfixes and support for Boost v1.82 from upstream
 
