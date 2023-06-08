@@ -42,6 +42,10 @@
 %bcond_without bundled_rhash
 %endif
 
+# cppdap is currently shipped as a static lib from upstream,
+# so we do not have it in the repos.
+%bcond_without bundled_cppdap
+
 # Run tests
 %bcond_without test
 
@@ -110,6 +114,8 @@ Source5:        %{name}.req
 # http://public.kitware.com/Bug/view.php?id=12965
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch100:       %{name}-findruby.patch
+# https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8550
+Patch101:       0001-bootstrap-Add-no-system-cppdap-configuration-switch.patch
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -139,6 +145,11 @@ BuildRequires:  %{_bindir}/sphinx-build
 %if %{without bootstrap}
 BuildRequires:  bzip2-devel
 BuildRequires:  curl-devel
+%if %{with bundled_cppdap}
+Provides: bundled(cppdap)
+%else
+BuildRequires:  cppdap-devel
+%endif
 BuildRequires:  expat-devel
 %if %{with bundled_jsoncpp}
 Provides: bundled(jsoncpp)
@@ -303,6 +314,9 @@ $SRCDIR/bootstrap --prefix=%{_prefix} \
                   --mandir=/share/man \
                   --%{?with_bootstrap:no-}system-libs \
                   --parallel="$(echo %{?_smp_mflags} | sed -e 's|-j||g')" \
+%if %{with bundled_cppdap}
+                  --no-system-cppdap \
+%endif
 %if %{with bundled_rhash}
                   --no-system-librhash \
 %endif
@@ -528,6 +542,7 @@ popd
 %changelog
 * Thu Jun 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc1-1
 - cmake-3.27.0-rc1
+- Use CMake-provided cppdap
 
 * Thu Jun 01 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-4
 - Backport several bugfixes and support for Boost v1.82 from upstream
