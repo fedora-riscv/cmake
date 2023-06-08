@@ -96,7 +96,7 @@ Summary:        Cross-platform make system
 # Source/kwsys/MD5.c is zlib
 # some GPL-licensed bison-generated files, which all include an
 # exception granting redistribution under terms of your choice
-License:        BSD and MIT and zlib%{?with bundled_cppdap: and Apache-2.0}
+License:        BSD and MIT and zlib%{?with_bundled_cppdap: and Apache-2.0}
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v%{major_version}.%{minor_version}/%{orig_name}-%{tar_version}.tar.gz
 Source1:        %{name}-init.el
