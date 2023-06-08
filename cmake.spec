@@ -378,8 +378,8 @@ do
   cp -p $f ./${fname}_${dname}
 done
 %if %{with bundled_cppdap}
-cp -p Utilities/cmcppdap/LICENSE{,.cppdap}
-cp -p Utilities/cmcppdap/NOTICE{,.cppdap}
+cp -p Utilities/cmcppdap/LICENSE LICENSE.cppdap
+cp -p Utilities/cmcppdap/NOTICE NOTICE.cppdap
 %endif
 # Cleanup pre-installed documentation
 %if %{with sphinx}
