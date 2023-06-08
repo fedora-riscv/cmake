@@ -96,7 +96,7 @@ Summary:        Cross-platform make system
 # Source/kwsys/MD5.c is zlib
 # some GPL-licensed bison-generated files, which all include an
 # exception granting redistribution under terms of your choice
-License:        BSD and MIT and zlib
+License:        BSD and MIT and zlib%{?with bundled_cppdap: and Apache-2.0}
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v%{major_version}.%{minor_version}/%{orig_name}-%{tar_version}.tar.gz
 Source1:        %{name}-init.el
@@ -377,6 +377,10 @@ do
   dname=$(basename $dir)
   cp -p $f ./${fname}_${dname}
 done
+%if %{with bundled_cppdap}
+cp -p Utilities/cmcppdap/LICENSE{,.cppdap}
+cp -p Utilities/cmcppdap/NOTICE{,.cppdap}
+%endif
 # Cleanup pre-installed documentation
 %if %{with sphinx}
 mv %{buildroot}%{_docdir}/%{name}/html .
@@ -480,6 +484,10 @@ popd
 %doc %dir %{_pkgdocdir}
 %license Copyright.txt*
 %license COPYING*
+%if %{with bundled_cppdap}
+%license LICENSE.cppdap
+%license NOTICE.cppdap
+%endif
 %if %{with sphinx}
 %{_mandir}/man1/c%{name}.1.*
 %{_mandir}/man1/%{name}.1.*
@@ -543,6 +551,7 @@ popd
 * Thu Jun 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc1-1
 - cmake-3.27.0-rc1
 - Use CMake-provided cppdap
+- Add licensing information for cppdap to packaged files if needed
 
 * Thu Jun 01 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-4
 - Backport several bugfixes and support for Boost v1.82 from upstream
