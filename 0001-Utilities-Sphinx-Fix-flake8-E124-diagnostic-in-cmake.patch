@@ -1,0 +1,29 @@
+From 5de805bea21af6c20f35afcbb925b1856d643bbe Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Mon, 12 Jun 2023 17:33:59 -0400
+Subject: [PATCH 1/9] Utilities/Sphinx: Fix flake8 E124 diagnostic in cmake.py
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Utilities/Sphinx/cmake.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Utilities/Sphinx/cmake.py b/Utilities/Sphinx/cmake.py
+index ffef5b36a2..faca2eda7f 100644
+--- a/Utilities/Sphinx/cmake.py
++++ b/Utilities/Sphinx/cmake.py
+@@ -514,7 +514,7 @@ class CMakeReferenceRole:
+         class Class(parent):
+             def __call__(self, name: str, rawtext: str, text: str,
+                          *args, **kwargs
+-                        ) -> Tuple[List[Node], List[system_message]]:
++                         ) -> Tuple[List[Node], List[system_message]]:
+                 text = CMakeReferenceRole._escape_angle_brackets(text)
+                 return super().__call__(name, rawtext, text, *args, **kwargs)
+         return Class
+-- 
+2.41.0
+

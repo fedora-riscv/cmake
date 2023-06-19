@@ -1,0 +1,33 @@
+From a8679c997d05dffda9f0e892221da244177ee502 Mon Sep 17 00:00:00 2001
+From: Markus Ferrell <markus.ferrell@kitware.com>
+Date: Wed, 14 Jun 2023 19:34:41 -0400
+Subject: [PATCH 8/9] Tutorial: Extend literal include to contain full code
+ changes in solution
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The solution for step 7 todo 5 did not include all of the code changes.
+Modify it to include the needed `#endif` code change.
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Help/guide/tutorial/Adding System Introspection.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Help/guide/tutorial/Adding System Introspection.rst b/Help/guide/tutorial/Adding System Introspection.rst
+index b3147736a3..117b2306d9 100644
+--- a/Help/guide/tutorial/Adding System Introspection.rst	
++++ b/Help/guide/tutorial/Adding System Introspection.rst	
+@@ -156,7 +156,7 @@ compute the square root in the ``mysqrt`` function. The ``mysqrt`` function in
+   :name: MathFunctions/mysqrt.cxx-ifdef
+   :language: c++
+   :start-after: // if we have both log and exp then use them
+-  :end-before: // do ten iterations
++  :end-before: return result;
+ 
+ .. raw:: html
+ 
+-- 
+2.41.0
+
