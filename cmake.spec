@@ -465,13 +465,6 @@ NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
 NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-default"
 NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-OnePackPerGroup"
 NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-AllInOne"
-# Failing in 3.27.0-rc1 for some regex mismatch,
-# but command actually succeeds.
-NO_TEST="$NO_TEST|RunCMake.Make"
-NO_TEST="$NO_TEST|RunCMake.BuildDepends"
-# Failing in 3.27.0-rc1 for some timestamp quirks.
-NO_TEST="$NO_TEST|Qt6Autogen.RerunMocBasic"
-NO_TEST="$NO_TEST|Qt6Autogen.RerunRccDepends"
 # curl test may fail during bootstrap
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
@@ -558,6 +551,7 @@ popd
 %changelog
 * Thu Jul 06 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc4-2
 - Fix FTBFS for redhat-rpm-config v260 and later
+- Re-include tests that were failing with rc1
 
 * Fri Jun 30 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc4-1
 - cmake-3.27.0-rc4
