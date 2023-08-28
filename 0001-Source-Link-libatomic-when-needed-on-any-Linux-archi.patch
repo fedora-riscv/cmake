@@ -1,0 +1,34 @@
+From fa3c4b6dbfaa4eb1d666c1bea4c759d221b7ad98 Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Thu, 24 Aug 2023 13:00:13 -0400
+Subject: [PATCH] Source: Link libatomic when needed on any Linux architecture
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Extend commit 78bbd58545 (Source: Link libatomic when needed on Linux
+32-bit ARM, 2023-07-27, v3.27.2~10^2) to check for libatomic on more
+architectures.
+
+Fixes: #25204
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Source/Checks/cm_cxx_features.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Source/Checks/cm_cxx_features.cmake b/Source/Checks/cm_cxx_features.cmake
+index 98d5eff072..02627464cc 100644
+--- a/Source/Checks/cm_cxx_features.cmake
++++ b/Source/Checks/cm_cxx_features.cmake
+@@ -96,7 +96,7 @@ else()
+   set(CMake_HAVE_CXX_FILESYSTEM FALSE)
+ endif()
+ 
+-if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "armv7l|sparc")
++if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|aarch64)$")
+   cm_check_cxx_feature(atomic_builtin)
+   if(NOT CMake_HAVE_CXX_ATOMIC_BUILTIN)
+     set(cm_check_cxx_feature_LINK_LIBRARIES atomic)
+-- 
+2.41.0
+
