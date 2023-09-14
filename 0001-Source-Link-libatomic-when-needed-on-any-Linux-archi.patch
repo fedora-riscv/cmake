@@ -1,7 +1,8 @@
 From fa3c4b6dbfaa4eb1d666c1bea4c759d221b7ad98 Mon Sep 17 00:00:00 2001
 From: Brad King <brad.king@kitware.com>
 Date: Thu, 24 Aug 2023 13:00:13 -0400
-Subject: [PATCH] Source: Link libatomic when needed on any Linux architecture
+Subject: [PATCH 1/9] Source: Link libatomic when needed on any Linux
+ architecture
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

@@ -1,0 +1,35 @@
+From 42adf3cba82c1f375d7a75a76697e674fd6f1b2f Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Tue, 12 Sep 2023 13:50:16 -0400
+Subject: [PATCH 9/9] Autogen: Evaluate INTERFACE_AUTOMOC_MACRO_NAMES
+ efficiently
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In commit c5c3aff1f5 (Autogen: Add INTERFACE_AUTOMOC_MACRO_NAMES target
+property, 2023-04-03, v3.27.0-rc1~197^2) we forgot to mark the property
+as a usage requirement.  This is needed for efficient evaluation over
+the target dependency closure.
+
+Fixes: #25238
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Source/cmGeneratorExpressionDAGChecker.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Source/cmGeneratorExpressionDAGChecker.h b/Source/cmGeneratorExpressionDAGChecker.h
+index 1919b014e5..782d6c8b7d 100644
+--- a/Source/cmGeneratorExpressionDAGChecker.h
++++ b/Source/cmGeneratorExpressionDAGChecker.h
+@@ -23,6 +23,7 @@ class cmGeneratorTarget;
+   SELECT(F, EvaluatingSystemIncludeDirectories, SYSTEM_INCLUDE_DIRECTORIES)   \
+   SELECT(F, EvaluatingCompileDefinitions, COMPILE_DEFINITIONS)                \
+   SELECT(F, EvaluatingCompileOptions, COMPILE_OPTIONS)                        \
++  SELECT(F, EvaluatingAutoMocMacroNames, AUTOMOC_MACRO_NAMES)                 \
+   SELECT(F, EvaluatingAutoUicOptions, AUTOUIC_OPTIONS)                        \
+   SELECT(F, EvaluatingSources, SOURCES)                                       \
+   SELECT(F, EvaluatingCompileFeatures, COMPILE_FEATURES)                      \
+-- 
+2.41.0
+

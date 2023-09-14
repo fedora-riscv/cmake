@@ -1,0 +1,53 @@
+From 6251edaed1c4f55625d96dc31e044a9fd23e1db2 Mon Sep 17 00:00:00 2001
+From: Ben Boeckel <ben.boeckel@kitware.com>
+Date: Tue, 5 Sep 2023 15:55:19 -0400
+Subject: [PATCH 3/9] cmGeneratorTarget: support config-independent Fortran
+ source queries
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some locations care about "any config with Fortran", so make a query for
+such (they may not know any configuration names themselves).
+
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Source/cmGeneratorTarget.cxx | 9 +++++++++
+ Source/cmGeneratorTarget.h   | 1 +
+ 2 files changed, 10 insertions(+)
+
+diff --git a/Source/cmGeneratorTarget.cxx b/Source/cmGeneratorTarget.cxx
+index 357d0a66a1..7d1fcf3e5c 100644
+--- a/Source/cmGeneratorTarget.cxx
++++ b/Source/cmGeneratorTarget.cxx
+@@ -8873,6 +8873,15 @@ bool cmGeneratorTarget::HaveFortranSources(std::string const& config) const
+                      });
+ }
+ 
++bool cmGeneratorTarget::HaveFortranSources() const
++{
++  auto sources = cmGeneratorTarget::GetAllConfigSources();
++  return std::any_of(sources.begin(), sources.end(),
++                     [](AllConfigSource const& sf) -> bool {
++                       return sf.Source->GetLanguage() == "Fortran"_s;
++                     });
++}
++
+ bool cmGeneratorTarget::HaveCxx20ModuleSources() const
+ {
+   auto const& fs_names = this->Target->GetAllFileSetNames();
+diff --git a/Source/cmGeneratorTarget.h b/Source/cmGeneratorTarget.h
+index 78945c3fa9..dca69fd001 100644
+--- a/Source/cmGeneratorTarget.h
++++ b/Source/cmGeneratorTarget.h
+@@ -1247,6 +1247,7 @@ public:
+                     cmGeneratorTarget const* t2) const;
+   };
+ 
++  bool HaveFortranSources() const;
+   bool HaveFortranSources(std::string const& config) const;
+ 
+   // C++20 module support queries.
+-- 
+2.41.0
+
