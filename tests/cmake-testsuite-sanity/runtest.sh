@@ -56,7 +56,7 @@ rlJournalStart
     rlRun "dnf builddep -y $TmpDir/SPECS/*.spec"
     rlRun "su -c 'rpmbuild -D \"_topdir $TmpDir\" -bp $TmpDir/SPECS/*.spec &>$TmpDir/rpmbuild.log' $BUILD_USER"
     rlRun "rlFileSubmit $TmpDir/rpmbuild.log"
-    rlRun "CMakeDir=`ls $TmpDir/BUILD/cmake* | tail -n 1`"
+    rlRun "CMakeDir=`ls $TmpDir/BUILD | grep -E 'cmake-[0-9]+\.[0-9]+\.[0-9]+' | tail -n 1`"
     rlRun "cd $TmpDir/BUILD/$CMakeDir"
     rlRun "su -c './bootstrap &>$TmpDir/bootstrap.log' $BUILD_USER"
     rlRun "rlFileSubmit $TmpDir/bootstrap.log"
