@@ -37,6 +37,7 @@ if rlIsFedora; then
 else
   REQUIRES="$REQUIRES yum-utils"
 fi
+export CLICOLOR=0
 
 rlJournalStart
   rlPhaseStartSetup
