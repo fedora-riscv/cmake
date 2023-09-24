@@ -62,6 +62,7 @@ rlJournalStart
     rlRun "su -c './bootstrap &>$TmpDir/bootstrap.log' $BUILD_USER"
     rlRun "rlFileSubmit $TmpDir/bootstrap.log"
     rlRun "ln -fs /usr/bin/cmake bin/cmake"
+    rlRun "make exit_code"
   rlPhaseEnd
 
   rlPhaseStartTest "run testsuite"
