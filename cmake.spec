@@ -69,7 +69,7 @@
 
 %global major_version 3
 %global minor_version 27
-%global patch_version 5
+%global patch_version 6
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
 %global baserelease 1
@@ -122,6 +122,9 @@ Patch100:       %{name}-findruby.patch
 %if 0%{?name_suffix:1}
 Patch1:         %{name}-rename.patch
 %endif
+
+# https://gitlab.kitware.com/cmake/cmake/-/issues/25265
+Patch10001:     0001-Linting-Fix-empty-evaluated-genex.patch
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -549,6 +552,11 @@ popd
 
 
 %changelog
+* Wed Sep 27 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.6-1
+- cmake-3.27.6
+  Fixes rhbz#2239015, rhbz#2240311
+- Include new upstream patch
+
 * Fri Sep 15 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.5-1
 - cmake-3.27.5
   Fixes rhbz#2239015

@@ -1,0 +1,70 @@
+From 80df7b174506eb5c7d9db3e65e2ffb59b9e8f16d Mon Sep 17 00:00:00 2001
+From: Orkun Tokdemir <ilhanorkuntokdemir@gmail.com>
+Date: Mon, 25 Sep 2023 14:50:59 +0200
+Subject: [PATCH] Linting: Fix empty evaluated genex
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Update logic added by commit 099934e313 (Add generator expression
+support to static code analysis hooks, 2023-03-24, v3.27.0-rc1~261^2),
+and preserved by commit 993dde925f (TargetGenerator: Factor out
+generation of code check rules, 2023-05-12, v3.27.0-rc1~84^2~2), to
+handle a generator expression that evaluates to the empty string.
+
+If `<LANG>_CPPCHECK`, `<LANG>_CPPLINT`, `<LANG>_CLANG_TIDY`, or
+`<LANG>_INCLUDE_WHAT_YOU_USE` are empty after evaluating generator
+expressions, do not run their lints.
+
+Fixes: #25265
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Source/cmCommonTargetGenerator.cxx          | 5 +----
+ Tests/RunCMake/MultiLint/RunCMakeTest.cmake | 1 +
+ Tests/RunCMake/MultiLint/genex.cmake        | 6 ++++++
+ 3 files changed, 8 insertions(+), 4 deletions(-)
+ create mode 100644 Tests/RunCMake/MultiLint/genex.cmake
+
+diff --git a/Source/cmCommonTargetGenerator.cxx b/Source/cmCommonTargetGenerator.cxx
+index 1924235dda..c781137669 100644
+--- a/Source/cmCommonTargetGenerator.cxx
++++ b/Source/cmCommonTargetGenerator.cxx
+@@ -335,10 +335,7 @@ std::string cmCommonTargetGenerator::GenerateCodeCheckRules(
+     auto evaluatedProp = cmGeneratorExpression::Evaluate(
+       *value, this->GeneratorTarget->GetLocalGenerator(), config,
+       this->GeneratorTarget, nullptr, this->GeneratorTarget, lang);
+-    if (!evaluatedProp.empty()) {
+-      return evaluatedProp;
+-    }
+-    return *value;
++    return evaluatedProp;
+   };
+   std::string const tidy_prop = cmStrCat(lang, "_CLANG_TIDY");
+   tidy = evaluateProp(tidy_prop);
+diff --git a/Tests/RunCMake/MultiLint/RunCMakeTest.cmake b/Tests/RunCMake/MultiLint/RunCMakeTest.cmake
+index 9b7a6a9971..f2df29019b 100644
+--- a/Tests/RunCMake/MultiLint/RunCMakeTest.cmake
++++ b/Tests/RunCMake/MultiLint/RunCMakeTest.cmake
+@@ -24,6 +24,7 @@ run_multilint(CXX)
+ if(NOT RunCMake_GENERATOR STREQUAL "Watcom WMake")
+   run_multilint(C-launch)
+   run_multilint(CXX-launch)
++  run_multilint(genex)
+ endif()
+ 
+ function(run_skip_linting test_name)
+diff --git a/Tests/RunCMake/MultiLint/genex.cmake b/Tests/RunCMake/MultiLint/genex.cmake
+new file mode 100644
+index 0000000000..17f9248b00
+--- /dev/null
++++ b/Tests/RunCMake/MultiLint/genex.cmake
+@@ -0,0 +1,6 @@
++enable_language(CXX)
++set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "$<IF:$<BOOL:FALSE>,${PSEUDO_IWYU},>")
++set(CMAKE_CXX_CLANG_TIDY "$<IF:$<BOOL:FALSE>,${PSEUDO_TIDY} --error,>")
++set(CMAKE_CXX_CPPLINT "$<IF:$<BOOL:FALSE>,${PSEUDO_CPPLINT} --error,>")
++set(CMAKE_CXX_CPPCHECK "$<IF:$<BOOL:FALSE>,${PSEUDO_CPPCHECK} -bad,>")
++add_executable(main main.cxx)
+-- 
+2.41.0
+
