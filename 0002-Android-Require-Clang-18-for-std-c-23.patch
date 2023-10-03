@@ -1,0 +1,59 @@
+From 75e9918a669666b16e7819b384c50858ea9d868b Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Wed, 27 Sep 2023 12:15:27 -0400
+Subject: [PATCH 2/6] Android: Require Clang 18 for -std=c++23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Update the Clang version checks added by
+
+* commit eacacc70fc (Clang: use -std=c++23 for Clang 17.0+,
+                     2023-05-08, v3.27.0-rc1~115^2)
+* commit 0183956d30 (Clang: C++26 support,
+                     2023-05-16, v3.27.0-rc1~85^2)
+
+to account for Android NDK r26's distribution of a Clang based on a
+development version of LLVM/Clang 17.0 that pre-dated addition of
+these flags.
+
+Follow the pattern from commit 12e6796b62 (Android: Do not pass
+non-existent Clang -std flags, 2018-04-02, v3.12.0-rc1~284^2),
+which fixed the same problem for `-std=c++17`.
+
+Fixes: #25281
+Signed-off-by: Björn Esser <besser82@fedoraproject.org>
+---
+ Modules/Compiler/Clang.cmake | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/Modules/Compiler/Clang.cmake b/Modules/Compiler/Clang.cmake
+index 46f5fc1941..e5683c2c03 100644
+--- a/Modules/Compiler/Clang.cmake
++++ b/Modules/Compiler/Clang.cmake
+@@ -173,7 +173,12 @@ macro(__compiler_clang_cxx_standards lang)
+ 
+     unset(_clang_version_std17)
+ 
+-    if(NOT CMAKE_${lang}_COMPILER_VERSION VERSION_LESS 17.0)
++    set(_clang_version_std23 17.0)
++    if(CMAKE_SYSTEM_NAME STREQUAL "Android")
++      set(_clang_version_std23 18.0)
++    endif()
++
++    if(NOT CMAKE_${lang}_COMPILER_VERSION VERSION_LESS "${_clang_version_std23}")
+       set(CMAKE_${lang}23_STANDARD_COMPILE_OPTION "-std=c++23")
+       set(CMAKE_${lang}23_EXTENSION_COMPILE_OPTION "-std=gnu++23")
+       set(CMAKE_${lang}26_STANDARD_COMPILE_OPTION "-std=c++26")
+@@ -183,6 +188,8 @@ macro(__compiler_clang_cxx_standards lang)
+       set(CMAKE_${lang}23_EXTENSION_COMPILE_OPTION "-std=gnu++2b")
+     endif()
+ 
++    unset(_clang_version_std23)
++
+     if("x${CMAKE_${lang}_SIMULATE_ID}" STREQUAL "xMSVC")
+       # The MSVC standard library requires C++14, and MSVC itself has no
+       # notion of operating in a mode not aware of at least that standard.
+-- 
+2.41.0
+

@@ -1,7 +1,7 @@
 From 80df7b174506eb5c7d9db3e65e2ffb59b9e8f16d Mon Sep 17 00:00:00 2001
 From: Orkun Tokdemir <ilhanorkuntokdemir@gmail.com>
 Date: Mon, 25 Sep 2023 14:50:59 +0200
-Subject: [PATCH] Linting: Fix empty evaluated genex
+Subject: [PATCH 1/6] Linting: Fix empty evaluated genex
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
