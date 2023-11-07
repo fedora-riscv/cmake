@@ -16,7 +16,7 @@
 # Run git tests
 %bcond_without git_test
 
-# Set to bcond_with or use --without gui to disable qt4 gui build
+# Set to bcond_with or use --without gui to disable qt gui build
 %bcond_without gui
 
 # Use ncurses for colorful output
@@ -42,6 +42,10 @@
 %bcond_without bundled_rhash
 %endif
 
+# cppdap is currently shipped as a static lib from upstream,
+# so we do not have it in the repos.
+%bcond_without bundled_cppdap
+
 # Run tests
 %bcond_without test
 
@@ -49,7 +53,10 @@
 %bcond_without X11_test
 
 # Do not build non-lto objects to reduce build time significantly.
-%global optflags %(echo '%{optflags}' | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
+%global build_cflags   %(echo '%{build_cflags}'   | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
+%global build_cxxflags %(echo '%{build_cxxflags}' | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
+%global build_fflags   %(echo '%{build_fflags}' | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
+%global build_fcflags  %(echo '%{build_fflags}' | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
 
 # Place rpm-macros into proper location
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
@@ -61,8 +68,11 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 26
-%global patch_version 3
+%global minor_version 27
+%global patch_version 7
+
+# For handling bump release by rpmdev-bumpspec and mass rebuild
+%global baserelease 1
 
 # Set to RC version if building RC, else comment out.
 #global rcsuf rc1
@@ -74,9 +84,6 @@
 %global pkg_version %{major_version}.%{minor_version}.%{patch_version}
 %global tar_version %{major_version}.%{minor_version}.%{patch_version}
 %endif
-
-# For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
 
 # Uncomment if building for EPEL
 #global name_suffix %%{major_version}
@@ -92,11 +99,11 @@ Summary:        Cross-platform make system
 # Source/kwsys/MD5.c is zlib
 # some GPL-licensed bison-generated files, which all include an
 # exception granting redistribution under terms of your choice
-License:        BSD and MIT and zlib
+License:        BSD-3-Clause AND MIT-open-group AND Zlib%{?with_bundled_cppdap: AND Apache-2.0}
 URL:            http://www.cmake.org
 Source0:        http://www.cmake.org/files/v%{major_version}.%{minor_version}/%{orig_name}-%{tar_version}.tar.gz
 Source1:        %{name}-init.el
-Source2:        macros.%{name}
+Source2:        macros.%{name}.in
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1202899
 Source3:        %{name}.attr
 Source4:        %{name}.prov
@@ -110,11 +117,6 @@ Source5:        %{name}.req
 # http://public.kitware.com/Bug/view.php?id=12965
 # https://bugzilla.redhat.com/show_bug.cgi?id=822796
 Patch100:       %{name}-findruby.patch
-# Add dl to CMAKE_DL_LIBS on MINGW
-# https://gitlab.kitware.com/cmake/cmake/issues/17600
-%if 0%{?fedora} && 0%{?fedora} < 38
-Patch102:       %{name}-mingw-dl.patch
-%endif
 
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
@@ -144,6 +146,11 @@ BuildRequires:  %{_bindir}/sphinx-build
 %if %{without bootstrap}
 BuildRequires:  bzip2-devel
 BuildRequires:  curl-devel
+%if %{with bundled_cppdap}
+Provides: bundled(cppdap)
+%else
+BuildRequires:  cppdap-devel
+%endif
 BuildRequires:  expat-devel
 %if %{with bundled_jsoncpp}
 Provides: bundled(jsoncpp)
@@ -178,7 +185,9 @@ BuildRequires:  python2-devel
 %endif
 %endif
 %if %{with gui}
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 9
+BuildRequires: pkgconfig(Qt6Widgets)
+%elif 0%{?rhel} > 7
 BuildRequires: pkgconfig(Qt5Widgets)
 %else
 BuildRequires: pkgconfig(QtGui)
@@ -196,7 +205,7 @@ BuildRequires:  %{name}-rpm-macros
 BuildRequires: make
 
 Requires:       %{name}-data = %{version}-%{release}
-Requires:       %{name}-rpm-macros = %{version}-%{release}
+Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 Requires:       %{name}-filesystem%{?_isa} = %{version}-%{release}
 
 # Explicitly require make.  (rhbz#1862014)
@@ -225,7 +234,7 @@ generation, code generation, and template instantiation.
 Summary:        Common data-files for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       %{name}-filesystem = %{version}-%{release}
-Requires:       %{name}-rpm-macros = %{version}-%{release}
+Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 %if %{with emacs}
 %if 0%{?fedora} || 0%{?rhel} >= 7
 Requires:       emacs-filesystem%{?_emacs_version: >= %{_emacs_version}}
@@ -296,15 +305,7 @@ tail -n +2 %{SOURCE5} >> %{name}.req
 
 
 %build
-%if 0%{?set_build_flags:1}
 %{set_build_flags}
-%else
-CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS
-CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS
-FFLAGS="${FFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FFLAGS
-FCFLAGS="${FCFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FCFLAGS
-%{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;}
-%endif
 SRCDIR="$(/usr/bin/pwd)"
 mkdir %{_vpath_builddir}
 pushd %{_vpath_builddir}
@@ -314,6 +315,9 @@ $SRCDIR/bootstrap --prefix=%{_prefix} \
                   --mandir=/share/man \
                   --%{?with_bootstrap:no-}system-libs \
                   --parallel="$(echo %{?_smp_mflags} | sed -e 's|-j||g')" \
+%if %{with bundled_cppdap}
+                  --no-system-cppdap \
+%endif
 %if %{with bundled_rhash}
                   --no-system-librhash \
 %endif
@@ -374,6 +378,10 @@ do
   dname=$(basename $dir)
   cp -p $f ./${fname}_${dname}
 done
+%if %{with bundled_cppdap}
+cp -p Utilities/cmcppdap/LICENSE LICENSE.cppdap
+cp -p Utilities/cmcppdap/NOTICE NOTICE.cppdap
+%endif
 # Cleanup pre-installed documentation
 %if %{with sphinx}
 mv %{buildroot}%{_docdir}/%{name}/html .
@@ -453,6 +461,10 @@ pushd %{_vpath_builddir}
 NO_TEST="CTestTestUpload"
 # Likely failing for hardening flags from system.
 NO_TEST="$NO_TEST|CustomCommand|RunCMake.PositionIndependentCode"
+# Failing for rpm 4.19
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-default"
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-OnePackPerGroup"
+NO_TEST="$NO_TEST|CPackComponentsForAll-RPM-AllInOne"
 # curl test may fail during bootstrap
 %if %{with bootstrap}
 NO_TEST="$NO_TEST|curl"
@@ -473,6 +485,10 @@ popd
 %doc %dir %{_pkgdocdir}
 %license Copyright.txt*
 %license COPYING*
+%if %{with bundled_cppdap}
+%license LICENSE.cppdap
+%license NOTICE.cppdap
+%endif
 %if %{with sphinx}
 %{_mandir}/man1/c%{name}.1.*
 %{_mandir}/man1/%{name}.1.*
@@ -533,6 +549,119 @@ popd
 
 
 %changelog
+* Sat Oct 07 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.7-1
+- cmake-3.27.7
+  Fixes rhbz#2242491
+
+* Tue Oct 03 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.6-2
+- Include new upstream patches
+
+* Wed Sep 27 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.6-1
+- cmake-3.27.6
+  Fixes rhbz#2239015, rhbz#2240311
+- Include new upstream patch
+
+* Fri Sep 15 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.5-1
+- cmake-3.27.5
+  Fixes rhbz#2239015
+
+* Fri Sep 15 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-9
+- Fix CI failure finally
+
+* Thu Sep 14 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-8
+- Fix CI failure
+
+* Thu Sep 14 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-7
+- Add upstream patches from milestone to cmake-3.27.5
+
+* Wed Sep 06 2023 Panu Matilainen <pmatilai@redhat.com> - 3.27.4-6
+- Only require cmake-rpm-macros when rpm-build is installed part II
+
+* Sat Sep 02 2023 Tom Stellard <tstellar@redhat.com> - 3.27.4-5
+- Convert license to SPDX
+
+* Fri Sep 01 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-4
+- Fix outdated CI configuration
+
+* Thu Aug 31 2023 Panu Matilainen <pmatilai@redhat.com> - 3.27.4-3
+- Only require cmake-rpm-macros when rpm-build is installed
+
+* Mon Aug 28 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-2
+- Add upstream patch to fix linking non-builtin libatomic on some arches
+
+* Thu Aug 24 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.4-1
+- cmake-3.27.4
+  Fixes rhbz#2233852
+
+* Thu Aug 17 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.3-1
+- cmake-3.27.3
+  Fixes rhbz#2232421
+
+* Thu Aug 10 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.2-1
+- cmake-3.27.2
+  Fixes rhbz#2231131
+
+* Tue Jul 25 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.1-1
+- cmake-3.27.1
+  Fixes rhbz#2226276
+
+* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 3.27.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Tue Jul 18 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0-1
+- cmake-3.27.0
+  Fixes rhbz#2223754
+
+* Fri Jul 14 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc5-1
+- cmake-3.27.0-rc5
+  Fixes rhbz#2222977
+
+* Thu Jul 06 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc4-2
+- Fix FTBFS for redhat-rpm-config v260 and later
+- Re-include tests that were failing with rc1
+
+* Fri Jun 30 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc4-1
+- cmake-3.27.0-rc4
+  Fixes rhbz#2218941
+
+* Tue Jun 20 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc3-1
+- cmake-3.27.0-rc3
+  Fixes rhbz#2214407
+
+* Mon Jun 19 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc2-2
+- Backport some upstream patches which will be included in rc3
+
+* Mon Jun 12 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc2-1
+- cmake-3.27.0-rc2
+
+* Thu Jun 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.27.0~rc1-1
+- cmake-3.27.0-rc1
+- Use CMake-provided cppdap
+- Add licensing information for cppdap to packaged files if needed
+- Exclude tests that started failing
+
+* Thu Jun 01 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-4
+- Backport several bugfixes and support for Boost v1.82 from upstream
+
+* Sat May 27 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-3
+- Rename macros.cmake -> macros.cmake.in
+- macros: Fix formatting and indentation
+- macros: Directly use %%set_build_flags, as it is supported since EPEL 7
+- Exclude tests that are failing for rpm 4.19
+
+* Fri May 19 2023 Neal Gompa <ngompa@fedoraproject.org> - 3.26.4-2
+- macros: Use the language build flag macros for compiler flags
+
+* Fri May 19 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.4-1
+- cmake-3.26.4
+  Fixes rhbz#2208383
+
+* Mon May 08 2023 Björn Esser <besser82@fedoraproject.org> - 3.26.3-3
+- Build cmake-gui with Qt6
+
+* Fri May 05 2023 Nianqing Yao <imbearchild@outlook.com> - 3.26.3-2
+- Fix build on riscv64
+
 * Mon Apr 24 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 3.26.3-1.rv64
 - Fix build on riscv64.
 

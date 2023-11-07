@@ -37,6 +37,7 @@ if rlIsFedora; then
 else
   REQUIRES="$REQUIRES yum-utils"
 fi
+export CLICOLOR=0
 
 rlJournalStart
   rlPhaseStartSetup
@@ -56,10 +57,12 @@ rlJournalStart
     rlRun "dnf builddep -y $TmpDir/SPECS/*.spec"
     rlRun "su -c 'rpmbuild -D \"_topdir $TmpDir\" -bp $TmpDir/SPECS/*.spec &>$TmpDir/rpmbuild.log' $BUILD_USER"
     rlRun "rlFileSubmit $TmpDir/rpmbuild.log"
-    rlRun "cd $TmpDir/BUILD/cmake*"
+    rlRun "CMakeDir=`ls $TmpDir/BUILD | grep -E '^cmake-[0-9]+(\.[0-9]+)+(-rc[0-9]+)?$' | tail -n 1`"
+    rlRun "cd $TmpDir/BUILD/$CMakeDir"
     rlRun "su -c './bootstrap &>$TmpDir/bootstrap.log' $BUILD_USER"
     rlRun "rlFileSubmit $TmpDir/bootstrap.log"
-    rlRun "ln -s /usr/bin/cmake bin/cmake"
+    rlRun "ln -fs /usr/bin/cmake bin/cmake"
+    rlRun "make exit_code"
   rlPhaseEnd
 
   rlPhaseStartTest "run testsuite"

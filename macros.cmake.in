@@ -9,23 +9,16 @@
 %__ctest /usr/bin/ctest
 %__cmake_builddir %{!?__cmake_in_source_build:%{_vpath_builddir}}%{?__cmake_in_source_build:.}
 
+
 # - Set default compile flags
 # - CMAKE_*_FLAGS_RELEASE are added *after* the *FLAGS environment variables
-# and default to -O3 -DNDEBUG.  Strip the -O3 so we can override with *FLAGS
+#   and default to -O3 -DNDEBUG.  Strip the -O3 so we can override with *FLAGS
 # - Turn on verbose makefiles so we can see and verify compile flags
 # - Turn off stripping by default so RPM can do it separately
 # - Set default install prefixes and library install directories
 # - Turn on shared libraries by default
 %cmake \
-%if 0%{?set_build_flags:1} \
-  %set_build_flags \
-%else \
-  CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
-  CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
-  FFLAGS="${FFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FFLAGS ; \
-  FCFLAGS="${FCFLAGS:-%optflags%{?_fmoddir: -I%_fmoddir}}" ; export FCFLAGS ; \
-  %{?__global_ldflags:LDFLAGS="${LDFLAGS:-%__global_ldflags}" ; export LDFLAGS ;} \
-%endif \
+  %{set_build_flags} \
   %__cmake \\\
         %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
         %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} \\\
