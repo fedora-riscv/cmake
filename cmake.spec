@@ -47,7 +47,7 @@
 %bcond_without bundled_cppdap
 
 # Run tests
-%bcond_without test
+%bcond_with test
 
 # Enable X11 tests
 %bcond_without X11_test
