@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 1
+%global baserelease 2
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -471,7 +471,7 @@ NO_TEST="$NO_TEST|curl"
 %endif
 %ifarch riscv64
 # These three tests timeout on riscv64, skip them.
-NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink"
+NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink|Qt6Autogen.MocIncludeSymlink"
 %endif
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 ## do this only periodically, not for every build -- besser82 20221102
@@ -549,6 +549,9 @@ popd
 
 
 %changelog
+* Wed Mar 06 2024 David Abdurachmanov <davidlt@rivosinc.com> - 3.28.3-2
+- Disable another timeout test on riscv64
+
 * Tue Feb 27 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-1
 - Update to 3.28.3 (should fix bz#2261013)
 
