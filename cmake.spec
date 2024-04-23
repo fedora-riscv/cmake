@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -549,6 +549,9 @@ popd
 
 
 %changelog
+* Tue Apr 23 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-3
+- Rebuild for rhash 1.4.4 soname bump
+
 * Wed Mar 06 2024 David Abdurachmanov <davidlt@rivosinc.com> - 3.28.3-2
 - Disable another timeout test on riscv64
 
