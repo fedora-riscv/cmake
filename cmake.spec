@@ -17,7 +17,7 @@
 %bcond_without git_test
 
 # Set to bcond_with or use --without gui to disable qt gui build
-%bcond_without gui
+%bcond_with gui
 
 # Use ncurses for colorful output
 %bcond_without ncurses
@@ -551,6 +551,7 @@ popd
 %changelog
 * Tue Apr 23 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-3
 - Rebuild for rhash 1.4.4 soname bump
+- Build without gui to avoid circular dep on self
 
 * Wed Mar 06 2024 David Abdurachmanov <davidlt@rivosinc.com> - 3.28.3-2
 - Disable another timeout test on riscv64
