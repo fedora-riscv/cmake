@@ -17,7 +17,7 @@
 %bcond_without git_test
 
 # Set to bcond_with or use --without gui to disable qt gui build
-%bcond_with gui
+%bcond_without gui
 
 # Use ncurses for colorful output
 %bcond_without ncurses
@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -549,6 +549,9 @@ popd
 
 
 %changelog
+* Tue Apr 23 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-4
+- Build with gui again
+
 * Tue Apr 23 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-3
 - Rebuild for rhash 1.4.4 soname bump
 - Build without gui to avoid circular dep on self
