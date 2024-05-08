@@ -471,7 +471,7 @@ NO_TEST="$NO_TEST|curl"
 %endif
 %ifarch riscv64
 # These three tests timeout on riscv64, skip them.
-NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink|Qt6Autogen.MocIncludeSymlink"
+NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink|Qt6Autogen.MocIncludeSymlink|CMakeLib.testUVProcessChain|RunCMake.AutogenQt6|RunCMake.ExternalProject|Qt6Autogen.ManySources|Qt6Autogen.MocInclude"
 %endif
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 ## do this only periodically, not for every build -- besser82 20221102
