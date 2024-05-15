@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 4
+%global baserelease 5
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -288,6 +288,17 @@ BuildArch:      noarch
 This package contains common RPM macros for %{name}.
 
 
+%package -n python3-cmake
+Summary:        Python metadata for packages depending on %{name}
+Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+BuildArch:      noarch
+
+%description -n python3-cmake
+Package provides metadata for Python packages depending on cmake.
+This is to make automatic dependency resolution work. The package is NOT
+using anything from the PyPI package called cmake.
+
+
 %prep
 %autosetup -n %{orig_name}-%{tar_version} -p 1
 
@@ -338,6 +349,21 @@ $SRCDIR/bootstrap --prefix=%{_prefix} \
                   -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF
 popd
 %make_build -C %{_vpath_builddir}
+
+# Provide Python metadata
+%global cmake_distinfo cmake-%{major_version}.%{minor_version}.%{patch_version}%{?rcsuf}.dist-info
+mkdir %{cmake_distinfo}
+cat > %{cmake_distinfo}/METADATA << EOF
+Metadata-Version: 2.1
+Name: cmake
+Version: %{major_version}.%{minor_version}.%{patch_version}%{?rcsuf}
+Summary: %{summary}
+Description-Content-Type: text/plain
+
+Metadata only package for automatic dependency resolution in the RPM
+ecosystem. This package is separate from the PyPI package called cmake.
+EOF
+echo rpm > %{cmake_distinfo}/INSTALLER
 
 
 %install
@@ -453,6 +479,10 @@ find %{buildroot}%{_libdir}/%{orig_name} -type f | \
 find %{buildroot}%{_bindir} -type f -or -type l -or -xtype l | \
   sed -e '/.*-gui$/d' -e '/^$/d' -e 's!^%{buildroot}!"!g' -e 's!$!"!g' >> lib_files.mf
 
+# Install Python metadata
+mkdir -p %{buildroot}%{python3_sitelib}
+cp -a %{cmake_distinfo} %{buildroot}%{python3_sitelib}
+
 
 %if %{with test}
 %check
@@ -548,7 +578,15 @@ popd
 %endif
 
 
+%files -n python3-cmake
+%{python3_sitelib}/%{cmake_distinfo}
+
+
 %changelog
+* Wed May 15 2024 Sandro <devel@penguinpee.nl> - 3.28.3-5
+- Add python3-cmake sub package providing metadata for Python packages
+  depending on CMake to facilitate automatic dependency resolution.
+
 * Tue Apr 23 2024 Orion Poplawski <orion@nwra.com> - 3.28.3-4
 - Build with gui again
 
