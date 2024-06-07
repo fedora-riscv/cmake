@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 5
+%global baserelease 6
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -583,6 +583,9 @@ popd
 
 
 %changelog
+* Fri Jun 07 2024 Python Maint <python-maint@redhat.com> - 3.28.3-6
+- Rebuilt for Python 3.13
+
 * Wed May 15 2024 Sandro <devel@penguinpee.nl> - 3.28.3-5
 - Add python3-cmake sub package providing metadata for Python packages
   depending on CMake to facilitate automatic dependency resolution.
