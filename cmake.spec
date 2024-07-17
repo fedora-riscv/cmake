@@ -72,7 +72,7 @@
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 6
+%global baserelease 7
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -583,6 +583,9 @@ popd
 
 
 %changelog
+* Wed Jul 17 2024 Fedora Release Engineering <releng@fedoraproject.org> - 3.28.3-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
 * Fri Jun 07 2024 Python Maint <python-maint@redhat.com> - 3.28.3-6
 - Rebuilt for Python 3.13
 
