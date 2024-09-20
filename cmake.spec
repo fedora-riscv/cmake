@@ -346,7 +346,8 @@ $SRCDIR/bootstrap --prefix=%{_prefix} \
                   -DCMAKE_CXX_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \
                   -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-O2 -g -DNDEBUG" \
                   -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
-                  -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF
+                  -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF \
+                  -DCMake_TEST_NO_NETWORK:BOOL=ON
 popd
 %make_build -C %{_vpath_builddir}
 
