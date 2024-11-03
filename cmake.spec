@@ -68,11 +68,11 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 3
-%global minor_version 28
-%global patch_version 3
+%global minor_version 30
+%global patch_version 5
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 8
+%global baserelease 1
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -587,6 +587,10 @@ popd
 
 
 %changelog
+* Sun Nov 03 2024 Björn Esser <besser82@fedoraproject.org> - 3.30.5-1
+- cmake-3.30.5
+  Fixes rhbz#2262837
+
 * Thu Oct 17 2024 Miro Hrončok <mhroncok@redhat.com> - 3.28.3-8
 - FindPython: Add Python 3.14 to the list of hardcoded Python versions
 
