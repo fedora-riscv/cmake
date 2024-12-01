@@ -69,7 +69,7 @@
 
 %global major_version 3
 %global minor_version 31
-%global patch_version 0
+%global patch_version 1
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
 %global baserelease 1
@@ -584,6 +584,11 @@ popd
 
 
 %changelog
+* Sun Dec 01 2024 Björn Esser <besser82@fedoraproject.org> - 3.31.1-1
+- cmake-3.31.1
+  Fixes rhbz#2324190
+- macros: Fix handling of double-dash without argument for ctest
+
 * Fri Nov 08 2024 Björn Esser <besser82@fedoraproject.org> - 3.31.0-1
 - cmake-3.31.0
   Fixes rhbz#2324190
