@@ -1015,7 +1015,7 @@ popd
 - Add patch to support FlexiBLAS
 
 * Tue Sep 29 2020 Christoph Junghans <junghans@votca.org> - 3.18.2-2
-- Make %ctest non-verbose by default
+- Make %%ctest non-verbose by default
 
 * Thu Aug 20 2020 Björn Esser <besser82@fedoraproject.org> - 3.18.2-1
 - Update to 3.18.2
