@@ -50,7 +50,8 @@
 %ifarch riscv64 \
            --timeout 6000 \\\
 %endif \
-            %{?_smp_mflags} %{**}
+            %{?_smp_mflags} \\\
+            %{lua:args=string.gsub(rpm.expand('%{**}'),"%-%-%s","");print(args);}
 
 
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
