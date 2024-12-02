@@ -51,7 +51,7 @@
            --timeout 6000 \\\
 %endif \
             %{?_smp_mflags} \\\
-            %{lua:print((string.gsub(rpm.expand('%{*}'),"%-%-%s","")))}
+            %{lua:print((string.gsub(rpm.expand('%{**}'),"%-%-%s","")))}
 
 
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
