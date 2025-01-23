@@ -72,7 +72,7 @@
 %global patch_version 4
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -588,6 +588,10 @@ popd
 
 
 %changelog
+* Thu Jan 23 2025 Orion Poplawski <orion@nwra.com> - 3.31.4-3
+- Define CMAKE_INSTALL_FULL_SBINDIR/CMAKE_INSTALL_SBINDIR to help with sbin
+  merge
+
 * Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org> - 3.31.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
 
