@@ -8,7 +8,7 @@
 
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # Build with Emacs support
 %bcond_without emacs
@@ -35,7 +35,7 @@
 %bcond_without sphinx
 
 %if !0%{?rhel}
-%bcond_with bundled_jsoncpp
+%bcond_without bundled_jsoncpp
 %bcond_with bundled_rhash
 %else
 %bcond_without bundled_jsoncpp
@@ -72,7 +72,7 @@
 %global patch_version 0
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 3
 
 # Set to RC version if building RC, else comment out.
 %global rcsuf rc2
@@ -590,6 +590,9 @@ popd
 
 
 %changelog
+* Thu Feb 27 2025 Björn Esser <besser82@fedoraproject.org> - 4.0.0~rc2-3
+- Rebuild (jsoncpp)
+
 * Thu Feb 27 2025 Björn Esser <besser82@fedoraproject.org> - 4.0.0~rc2-2
 - Restore compatibility with cmake3 macros
 
