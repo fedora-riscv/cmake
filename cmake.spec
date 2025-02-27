@@ -214,6 +214,11 @@ Requires:       make
 # Provide the major version name
 Provides: %{orig_name}%{major_version} = %{version}-%{release}
 
+# Provide cmake3 for legacy.
+%if 0%{?major_version} > 3
+Provides: %{orig_name}3 = %{version}-%{release}
+%endif
+
 # Source/kwsys/MD5.c
 # see https://fedoraproject.org/wiki/Packaging:No_Bundled_Libraries
 Provides: bundled(md5-deutsch)
@@ -592,6 +597,7 @@ popd
 %changelog
 * Thu Feb 27 2025 Björn Esser <besser82@fedoraproject.org> - 4.0.0~rc2-3
 - Rebuild (jsoncpp)
+- Provide cmake3 for legacy
 
 * Thu Feb 27 2025 Björn Esser <besser82@fedoraproject.org> - 4.0.0~rc2-2
 - Restore compatibility with cmake3 macros
