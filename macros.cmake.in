@@ -61,3 +61,9 @@
 %cmake@@CMAKE_MAJOR_VERSION@@_install %cmake_install
 %ctest@@CMAKE_MAJOR_VERSION@@(:-:h:j:u:v:A:C:D:E:F:H:I:L:M:N:O:Q:R:S:T:U:V:) \
   %ctest %{**}
+
+# For compatibility with cmake3 macros
+%cmake3 %cmake
+%cmake3_build %cmake_build
+%cmake3_install %cmake_install
+%ctest3(:-:h:j:u:v:A:C:D:E:F:H:I:L:M:N:O:Q:R:S:T:U:V:) %ctest %{**}
