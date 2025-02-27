@@ -8,7 +8,7 @@
 
 # Set to bcond_without or use --with bootstrap if bootstrapping a new release
 # or architecture
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # Build with Emacs support
 %bcond_without emacs
@@ -35,7 +35,7 @@
 %bcond_without sphinx
 
 %if !0%{?rhel}
-%bcond_without bundled_jsoncpp
+%bcond_with bundled_jsoncpp
 %bcond_with bundled_rhash
 %else
 %bcond_without bundled_jsoncpp
