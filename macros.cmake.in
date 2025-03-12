@@ -19,7 +19,8 @@
 # - Avoid errors in packages with CMAKE_MINIMUM_REQUIRED < 3.5
 %cmake \
   %{set_build_flags} \
-  export CMAKE_POLICY_VERSION_MINIMUM=3.5 \
+  CMAKE_POLICY_VERSION_MINIMUM="${CMAKE_POLICY_VERSION_MINIMUM:-3.5}" \
+  export CMAKE_POLICY_VERSION_MINIMUM \
   %__cmake \\\
         %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} \\\
         %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} \\\

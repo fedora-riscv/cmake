@@ -72,7 +72,7 @@
 %global patch_version 0
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 3
+%global baserelease 4
 
 # Set to RC version if building RC, else comment out.
 %global rcsuf rc3
@@ -595,6 +595,9 @@ popd
 
 
 %changelog
+* Wed Mar 12 2025 Björn Esser <besser82@fedoraproject.org> - 4.0.0~rc3-4
+- macros: Set CMAKE_POLICY_VERSION_MINIMUM as environment variable
+
 * Fri Mar 07 2025 Yaakov Selkowitz <yselkowi@redhat.com> - 4.0.0~rc3-3
 - Define CMAKE_POLICY_VERSION_MINIMUM in %%cmake
 
