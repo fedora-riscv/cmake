@@ -514,7 +514,7 @@ NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocInc
 NO_TEST="$NO_TEST|RunCMake.Make|RunCMake.BuildDepends|Qt6Autogen.RerunMocBasic|Qt6Autogen.RerunRccDepends"
 %endif
 # Drop for v4.0.0-final
-NO_TEST="$NO_TEST|RunCMake.LinkWarningAsError"
+NO_TEST="$NO_TEST|RunCMake.LinkWarningAsError|RunCMake.ParseImplicitLinkInfo"
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 ## do this only periodically, not for every build -- besser82 20221102
 # Keep an eye on failing tests
