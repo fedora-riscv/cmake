@@ -1,30 +1,22 @@
-Index: cmake-4.0.0-rc2/Modules/FindRuby.cmake
+Index: cmake-3.31.4/Modules/FindRuby.cmake
 ===================================================================
---- cmake-4.0.0-rc2.orig/Modules/FindRuby.cmake
-+++ cmake-4.0.0-rc2/Modules/FindRuby.cmake
-@@ -285,14 +285,9 @@ if (Ruby_EXECUTABLE AND NOT Ruby_EXECUTA
+--- cmake-3.31.4.orig/Modules/FindRuby.cmake
++++ cmake-3.31.4/Modules/FindRuby.cmake
+@@ -307,14 +307,9 @@ if(Ruby_EXECUTABLE AND NOT Ruby_VERSION_
    _RUBY_CONFIG_VAR("sitearchdir" Ruby_SITEARCH_DIR)
    _RUBY_CONFIG_VAR("sitelibdir" Ruby_SITELIB_DIR)
  
 -  # vendor_ruby available ?
 -  execute_process(COMMAND ${Ruby_EXECUTABLE} -r vendor-specific -e "print 'true'"
--                  OUTPUT_VARIABLE Ruby_HAS_VENDOR_RUBY ERROR_QUIET)
+-    OUTPUT_VARIABLE Ruby_HAS_VENDOR_RUBY  ERROR_QUIET)
 -
--  if (Ruby_HAS_VENDOR_RUBY)
+-  if(Ruby_HAS_VENDOR_RUBY)
 -    _RUBY_CONFIG_VAR("vendorlibdir" Ruby_VENDORLIB_DIR)
 -    _RUBY_CONFIG_VAR("vendorarchdir" Ruby_VENDORARCH_DIR)
--  endif ()
-+# vendor_ruby
+-  endif()
++  # vendor_ruby
 +  _RUBY_CONFIG_VAR("vendorlibdir" Ruby_VENDORLIB_DIR)
 +  _RUBY_CONFIG_VAR("vendorarchdir" Ruby_VENDORARCH_DIR)
  
    # save the results in the cache so we don't have to run ruby the next time again
-   set(_Ruby_EXECUTABLE_LAST_QUERIED "${Ruby_EXECUTABLE}" CACHE INTERNAL "The ruby executable last queried for version and path info")
-@@ -306,7 +301,7 @@ if (Ruby_EXECUTABLE AND NOT Ruby_EXECUTA
-   set(Ruby_RUBY_LIB_DIR ${Ruby_RUBY_LIB_DIR} CACHE PATH "The Ruby ruby-lib dir" FORCE)
-   set(Ruby_SITEARCH_DIR ${Ruby_SITEARCH_DIR} CACHE PATH "The Ruby site arch dir" FORCE)
-   set(Ruby_SITELIB_DIR ${Ruby_SITELIB_DIR} CACHE PATH "The Ruby site lib dir" FORCE)
--  set(Ruby_HAS_VENDOR_RUBY ${Ruby_HAS_VENDOR_RUBY} CACHE BOOL "Vendor Ruby is available" FORCE)
-+  set(Ruby_HAS_VENDOR_RUBY $<BOOL:true> CACHE BOOL "Vendor Ruby is available" FORCE)
-   set(Ruby_VENDORARCH_DIR ${Ruby_VENDORARCH_DIR} CACHE PATH "The Ruby vendor arch dir" FORCE)
-   set(Ruby_VENDORLIB_DIR ${Ruby_VENDORLIB_DIR} CACHE PATH "The Ruby vendor lib dir" FORCE)
+   set(Ruby_VERSION_MAJOR    ${Ruby_VERSION_MAJOR}    CACHE PATH "The Ruby major version" FORCE)
