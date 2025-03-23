@@ -1,6 +1,7 @@
 #
 # Macros for cmake
 #
+# TODO: Remove non-standard LIB_SUFFIX and *_INSTALL variables with a change proposal
 %_cmake_lib_suffix64 -DLIB_SUFFIX=64
 %_cmake_shared_libs -DBUILD_SHARED_LIBS:BOOL=ON
 %_cmake_skip_rpath -DCMAKE_SKIP_RPATH:BOOL=ON
