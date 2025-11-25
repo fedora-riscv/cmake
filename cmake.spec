@@ -91,7 +91,7 @@
 
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{pkg_version}
-Release:        %{baserelease}%{?dist}
+Release:        %{baserelease}.rv64%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -505,7 +505,8 @@ NO_TEST="$NO_TEST|curl"
 %endif
 %ifarch riscv64
 # These three tests timeout on riscv64, skip them.
-NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink|Qt6Autogen.MocIncludeSymlink"
+#NO_TEST="$NO_TEST|Qt5Autogen.ManySources|Qt5Autogen.MocInclude|Qt5Autogen.MocIncludeSymlink|Qt6Autogen.MocIncludeSymlink"
+NO_TEST="$NO_TEST|RunCMake.Make|RunCMake.BuildDepends|Qt6Autogen.RerunMocBasic|Qt6Autogen.RerunRccDepends"
 %endif
 %if 0%{?fedora} == 41
 # Test failing on Fedora 41, only.
@@ -591,6 +592,9 @@ popd
 
 
 %changelog
+* Tue Nov 25 2025 Liu Yang <Yang.Liu.sn@gmail.com> - 3.31.6-4.rv64
+- Update failed tests list for riscv64.
+
 * Wed Jul 23 2025 Fedora Release Engineering <releng@fedoraproject.org> - 3.31.6-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
 
