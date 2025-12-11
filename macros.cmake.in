@@ -56,6 +56,17 @@
             %{lua:print((string.gsub(rpm.expand('%{**}'),"%-%-%s","")))}
 
 
+# Declarative buildsystem macros (usable with rpm >= 4.20)
+# https://rpm-software-management.github.io/rpm/manual/buildsystem.html
+%cmake_generate_buildrequires(-) echo "cmake"
+
+%buildsystem_cmake_generate_buildrequires() %cmake_generate_buildrequires %{*}
+%buildsystem_cmake_conf() %cmake %{*}
+%buildsystem_cmake_build() %cmake_build %{*}
+%buildsystem_cmake_install() %cmake_install %{*}
+%buildsystem_cmake_check() %{?with_ctest:%ctest %{*}} %{!?with_ctest:%{nil}}
+
+
 # Legacy cmakeX macros for multiversioned CMake
 
 %cmake@@CMAKE_MAJOR_VERSION@@ %cmake
