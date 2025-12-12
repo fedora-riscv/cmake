@@ -58,7 +58,7 @@
 
 # Declarative buildsystem macros (usable with rpm >= 4.20)
 # https://rpm-software-management.github.io/rpm/manual/buildsystem.html
-%cmake_generate_buildrequires(-) echo "cmake"
+%cmake_generate_buildrequires(-) echo "cmake-rpm-macros"; echo "cmake"
 
 %buildsystem_cmake_generate_buildrequires() %cmake_generate_buildrequires %{*}
 %buildsystem_cmake_conf() %cmake %{*}
