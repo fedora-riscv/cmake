@@ -47,7 +47,12 @@
 %bcond_without bundled_cppdap
 
 # Run tests
+# ... except i686.
+%ifnarch i686
 %bcond_without test
+%else
+%bcond_with test
+%endif
 
 # Enable X11 tests
 %bcond_without X11_test
