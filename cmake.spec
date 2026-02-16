@@ -620,7 +620,7 @@ popd
 
 
 %changelog
-* Thu Feb 02 2026 Cristian Le <git@lecris.dev> - 4.2.3-2
+* Mon Feb 16 2026 Cristian Le <git@lecris.dev> - 4.2.3-2
 - Default generator to Ninja (rhbz#2376112)
 
 * Tue Feb 10 2026 Tom Callaway <spot@fedoraproject.org> - 4.2.3-1
